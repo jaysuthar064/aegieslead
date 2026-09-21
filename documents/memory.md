@@ -8,7 +8,7 @@
 
 * **Repository Remote:** `https://github.com/jaysuthar064/aegieslead.git`
 * **Default Branch:** `main` (Pushed & Synchronized)
-* **Clean Ignored Assets:** `node_modules/`, `dist/`, `.kilo/`, logs, caches, and backups excluded via root `.gitignore`.
+* **Clean Ignored Assets:** `.env`, `.env.*`, `node_modules/`, `dist/`, `.kilo/`, logs, caches, and backups excluded via root and frontend `.gitignore`. Only `.env.example` is tracked.
 
 ---
 
