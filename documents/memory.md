@@ -28,23 +28,26 @@
 
 ---
 
-## 2. Multi-Page Architecture & Content Inventory
+## 2. Cinematic Motion Design & Interactive Architecture
 
-1. **Home (`/`):** Unified Operating System for Physical Security (Hero, Infinite Logo Marquee Slider, Dual Persona Switcher, Command Center Interface, Z-Pattern Features, Metrics Bar, Case Studies, FAQ, Dual CTA).
-2. **Platform Architecture (`/platform`):** Comprehensive Technical Architecture & Engines (Sub-Second GPS Dispatch, Incident Evidence Chain-of-Custody, Automated Invoicing, Performance Benchmarks, FAQ).
-3. **Who We Serve / Solutions (`/who-we-serve`):** Enterprise Security Teams vs. Guarding Contractor Agencies vs. Industry Verticals (Commercial Real Estate, Healthcare Systems, Critical Infrastructure NERC CIP).
-4. **Workforce Management & Mobile Guard (`/workforce`):** Offline-First Guard Mobile Portal, NFC Checkpoint Scanning, Emergency Duress / Panic Alerts, Shift Rostering & Attendance Reminders.
-5. **Pricing & ROI (`/pricing`):** Transparent Guard Capacity Tiers (Starter, Professional, Enterprise Scale), ROI Calculator (3.4x Annual ROI), Feature Comparison, FAQ.
-6. **Company, Security & Trust (`/company`):** Security Governance (SOC 2 Type II, ISO 27001, GDPR, HIPAA), 99.99% AWS Multi-Region Infrastructure, System Status.
+* **Interactive Custom Cursor (`CustomCursor.tsx`):** Precision 6px center dot paired with a spring-lerped trailing ring that expands on interactive elements (`button`, `a`, `select`, `input`, `textarea`), with automatic touch-screen deactivation.
+* **Magnetic Button Pull (`Magnetic.tsx`):** Spring dampening pull physics drawing buttons toward cursor position on hover.
+* **3D Perspective Card Tilt (`TiltCard.tsx`):** Dynamic 3D perspective rotation (`perspective(1200px) rotateX(...) rotateY(...)`) with dynamic specular lighting glare overlays tracking cursor coordinates.
+* **Dramatic Typography & Scroll Reveal (`TextReveal.tsx`, `ScrollReveal.tsx`):** Word-by-word clip mask transitions and staggered scroll-triggered reveals using native `IntersectionObserver` with hardware-accelerated transforms.
+* **Pinned Horizontal Storytelling Reel (`HorizontalStoryReel.tsx`):** Interactive horizontal feature carousel showcasing the 4 core pillars with step counters, tab track selectors, and 3D tilt stat cards.
+* **Infinite Logo Marquee Slider (`TrustLogosSection.tsx`):** Smooth continuous loop with edge gradient fade masks and hover-pause capability.
+* **Full Accessibility & Reduced Motion:** Native `@media (prefers-reduced-motion: reduce)` support instantly disables intensive motion for users with vestibular sensitivities.
 
 ---
 
-## 3. UI, Animation & Navigation Specifications
+## 3. Multi-Page Architecture & Content Inventory
 
-* **Navbar Layout:** Clean 3-part layout (Left: Brand Shield & Logo, Center: Navigation links with mega-menus, Right: "Contact Sales" and "Request a Demo" buttons with shimmer effect). Client portal button removed.
-* **Infinite Logo Marquee Slider:** Seamless horizontal slider with gradient edge fade masks and hover-pause animation.
-* **Smooth Page Transitions & Micro-Interactions:** `animate-fade-in-up`, `hover-lift` card elevation, `button-shimmer` sweeps, `animate-float-slow` floating widgets, and live clock timer.
-* **Dual-Mode CTA Modal:** Differentiated forms for "Request a Demo" (`mode="demo"`) vs. "Contact Enterprise Sales / Quote" (`mode="sales"`), submitting directly to WordPress REST API (`POST /?rest_route=/aegies/v1/leads`).
+1. **Home (`/`):** Unified Operating System for Physical Security (Hero, Infinite Logo Marquee Slider, Dual Persona Switcher, Pinned Story Reel, Command Center Interface, Z-Pattern Features, Metrics Bar, Case Studies, FAQ, Dual CTA).
+2. **Platform Architecture (`/platform`):** Comprehensive Technical Capabilities (Sub-Second GPS Dispatch, Chain-of-Custody Incident Management, Automated Invoicing, Performance Benchmarks, FAQ).
+3. **Who We Serve / Solutions (`/who-we-serve`):** Enterprise Security Teams vs. Guarding Contractor Agencies vs. Industry Verticals (Commercial Real Estate, Healthcare Systems, Critical Infrastructure NERC CIP).
+4. **Workforce Management & Mobile Guard (`/workforce`):** Offline-First Guard Mobile Portal, NFC Checkpoint Scanning, Emergency Duress / Panic Alerts, Shift Rostering & Attendance Reminders.
+5. **Pricing & ROI (`/pricing`):** Transparent Guard Capacity Tiers (Starter, Professional, Enterprise Scale), ROI Calculator (3.4x Annual ROI), Feature Comparison Matrix, Licensing FAQ.
+6. **Company, Security & Trust (`/company`):** Security Governance (SOC 2 Type II, ISO 27001, GDPR, HIPAA), 99.99% AWS Multi-Region Infrastructure, System Status.
 
 ---
 
@@ -57,4 +60,4 @@
 | **Phase 3** | High-Performance REST API & Open CORS Layer | ✅ Complete | Endpoints `/global`, `/pages`, `/page/{slug}`, `/leads`, 100% open CORS in `.htaccess` and `mu-plugins` |
 | **Phase 4** | React Frontend Dynamic Section Engine | ✅ Complete | High-contrast Trackforce 1:1 light SaaS design system matching `design-study.md` |
 | **Phase 5** | Live Sync, .env Security & Media Pipeline | ✅ Complete | Background revalidation, `.env` gitignore security, dynamic image upload rendering |
-| **Phase 6** | Multi-Page Architecture, Animations & Leads Workflow | ✅ Complete | 6 rich pages, infinite logo marquee slider, modern motion animations, dual modal, clean navbar layout |
+| **Phase 6** | Cinematic Motion Design, Multi-Page & Leads Suite | ✅ Complete | Custom cursor, magnetic buttons, 3D card tilt, horizontal story reel, dual modal, 6 rich pages |
