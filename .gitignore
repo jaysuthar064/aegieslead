@@ -1,0 +1,38 @@
+# Node & Frontend Dependencies
+node_modules/
+dist/
+dist-ssr/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local Assistant & Agent State
+.kilo/
+.kilocode/
+.opencode/
+
+# Environment & Local Overrides
+*.local
+.env.local
+.env.*.local
+
+# Operating System & Editor Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# WordPress Caches, Upgrades & Backups
+wordpress/wp-content/upgrade/
+wordpress/wp-content/cache/
+wordpress/wp-content/backup-db/
+*.sql
+*.tar.gz
+*.zip
+*.bak
+*.log

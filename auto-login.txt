@@ -1,0 +1,27 @@
+============================================================
+           AEGIES LEAD — HEADLESS WORDPRESS WORKSPACE
+============================================================
+
+1. ONE-CLICK WORDPRESS ADMIN AUTO-LOGIN (No password needed):
+   http://localhost:8889/?aegies_login=1&token=aegies-dev-token-123
+
+2. DIRECT AEGIES HEADLESS CMS SIDEBAR:
+   http://localhost:8889/wp-admin/admin.php?page=aegies-headless-cms
+
+3. REACT FRONTEND:
+   http://localhost:5173
+
+4. WORDPRESS REST API ENDPOINTS:
+   - Global Settings:  http://localhost:8889/?rest_route=/aegies/v1/global
+   - Page Content:     http://localhost:8889/?rest_route=/aegies/v1/page/home
+   - Platform Page:    http://localhost:8889/?rest_route=/aegies/v1/page/platform
+   - Who We Serve:     http://localhost:8889/?rest_route=/aegies/v1/page/who-we-serve
+   - Pricing:          http://localhost:8889/?rest_route=/aegies/v1/page/pricing
+   - Company:          http://localhost:8889/?rest_route=/aegies/v1/page/company
+
+============================================================
+HOW CMS SYNC WORKS:
+- Edit any page or section in the WP Admin Sidebar (Aegies CMS).
+- Click "Save & Sync to Frontend".
+- Changes and uploaded images automatically sync to the React frontend in real-time.
+============================================================
