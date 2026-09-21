@@ -9,13 +9,20 @@ import { MetricsSection } from './sections/MetricsSection';
 import { CaseStudiesSection } from './sections/CaseStudiesSection';
 import { FaqAccordionSection } from './sections/FaqAccordionSection';
 import { CtaBannerSection } from './sections/CtaBannerSection';
+import { HorizontalStoryReel } from './motion/HorizontalStoryReel';
+import { ScrollReveal } from './motion/ScrollReveal';
 
 interface Props {
   sections: CmsSection[];
   onRequestDemo?: (persona?: string, mode?: 'demo' | 'sales') => void;
+  showStoryReel?: boolean;
 }
 
-export const DynamicSectionRenderer: React.FC<Props> = ({ sections, onRequestDemo }) => {
+export const DynamicSectionRenderer: React.FC<Props> = ({
+  sections,
+  onRequestDemo,
+  showStoryReel = true
+}) => {
   if (!sections || !Array.isArray(sections) || sections.length === 0) {
     return (
       <div className="py-24 text-center text-slate-400">
@@ -32,28 +39,61 @@ export const DynamicSectionRenderer: React.FC<Props> = ({ sections, onRequestDem
   return (
     <div className="w-full">
       {activeSections.map((sec) => {
+        let content: React.ReactNode = null;
+
         switch (sec.type) {
           case 'hero':
-            return <HeroSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            content = <HeroSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            break;
           case 'trust_logos':
-            return <TrustLogosSection key={sec.id} settings={sec.settings} />;
+            content = <TrustLogosSection key={sec.id} settings={sec.settings} />;
+            break;
           case 'audience_tabs':
-            return <AudienceTabsSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            content = <AudienceTabsSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            break;
           case 'product_showcase':
-            return <ProductShowcaseSection key={sec.id} settings={sec.settings} />;
+            content = <ProductShowcaseSection key={sec.id} settings={sec.settings} />;
+            break;
           case 'z_features':
-            return <FeatureZRowsSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            content = <FeatureZRowsSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            break;
           case 'metrics':
-            return <MetricsSection key={sec.id} settings={sec.settings} />;
+            content = <MetricsSection key={sec.id} settings={sec.settings} />;
+            break;
           case 'case_studies':
-            return <CaseStudiesSection key={sec.id} settings={sec.settings} />;
+            content = <CaseStudiesSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            break;
           case 'faq_accordion':
-            return <FaqAccordionSection key={sec.id} settings={sec.settings} />;
+            content = <FaqAccordionSection key={sec.id} settings={sec.settings} />;
+            break;
           case 'cta_banner':
-            return <CtaBannerSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            content = <CtaBannerSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
+            break;
           default:
-            return null;
+            content = null;
+            break;
         }
+
+        const isHeroOrLogos = sec.type === 'hero' || sec.type === 'trust_logos';
+
+        return (
+          <React.Fragment key={sec.id}>
+            {isHeroOrLogos ? (
+              content
+            ) : (
+              <ScrollReveal variant="fade-up" delay={50} threshold={0.1}>
+                {content}
+              </ScrollReveal>
+            )}
+
+            {/* Inject Pinned Horizontal Story Reel right after product showcase or audience tabs */}
+            {showStoryReel && (sec.type === 'audience_tabs' || (sec.type === 'product_showcase' && activeSections.length < 6)) && (
+              <ScrollReveal variant="fade-up" delay={80} threshold={0.1}>
+                <HorizontalStoryReel onRequestDemo={onRequestDemo} />
+              </ScrollReveal>
+            )}
+          </React.Fragment>
+        );
       })}
     </div>
   );

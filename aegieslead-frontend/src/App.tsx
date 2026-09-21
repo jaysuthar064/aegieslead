@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import { DynamicSectionRenderer } from './components/DynamicSectionRenderer';
 import { DemoModal, type ModalMode } from './components/DemoModal';
 import { SeoHead } from './components/SeoHead';
+import { CustomCursor } from './components/motion/CustomCursor';
 
 function getInitialPageFromUrl(): { slug: string; anchor?: string } {
   const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
@@ -139,7 +140,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-blue-600 selection:text-white relative">
+      {/* Precision Interactive Motion Cursor */}
+      <CustomCursor />
+
       {/* Dynamic SEO Meta Ingestion */}
       <SeoHead
         meta={pageData.meta}
@@ -155,11 +159,12 @@ function App() {
         onRequestDemo={handleOpenDemoModal}
       />
 
-      {/* Main Content Area: Dynamic Section Dispatcher */}
-      <main className="flex-grow pt-20">
+      {/* Main Content Area: Dynamic Section Dispatcher with Fluid Page Transitions */}
+      <main key={currentPage} className="flex-grow pt-20 animate-fade-in-up">
         <DynamicSectionRenderer
           sections={pageData.sections}
           onRequestDemo={handleOpenDemoModal}
+          showStoryReel={currentPage === 'home' || currentPage === 'platform'}
         />
       </main>
 
