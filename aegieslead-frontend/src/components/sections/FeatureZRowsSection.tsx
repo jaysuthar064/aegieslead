@@ -10,6 +10,15 @@ interface Props {
 export const FeatureZRowsSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
   const rows = settings.rows || [];
 
+  const getRowAnchorId = (badge: string, title: string, idx: number) => {
+    const combined = `${badge} ${title}`.toLowerCase();
+    if (combined.includes('patrol')) return 'patrols';
+    if (combined.includes('incident')) return 'incidents';
+    if (combined.includes('proposal') || combined.includes('rfp')) return 'proposals';
+    if (combined.includes('bill') || combined.includes('timesheet')) return 'billing';
+    return `feature-row-${idx + 1}`;
+  };
+
   const getVisualContent = (badge: string, title: string) => {
     if (badge.includes('FIELD') || title.includes('Patrol')) {
       return (
@@ -80,7 +89,7 @@ export const FeatureZRowsSection: React.FC<Props> = ({ settings, onRequestDemo }
   };
 
   return (
-    <section className="py-24 bg-white text-slate-900 border-b border-slate-200">
+    <section id="features" className="py-24 bg-white text-slate-900 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
         
         {settings.section_title && (
@@ -96,11 +105,13 @@ export const FeatureZRowsSection: React.FC<Props> = ({ settings, onRequestDemo }
 
         {rows.map((row, idx) => {
           const isImageLeft = row.image_align === 'left';
+          const rowId = getRowAnchorId(row.badge, row.title, idx);
 
           return (
             <div
               key={idx}
-              className={`grid grid-cols-1 lg:grid-cols-12 gap-12 items-center ${
+              id={rowId}
+              className={`scroll-mt-28 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center ${
                 isImageLeft ? 'lg:flex-row-reverse' : ''
               }`}
             >
@@ -133,19 +144,20 @@ export const FeatureZRowsSection: React.FC<Props> = ({ settings, onRequestDemo }
 
                 {row.cta_text && (
                   <div className="pt-4">
-                    <a
-                      href={row.cta_url || '#demo'}
-                      onClick={(e) => {
+                    <button
+                      type="button"
+                      onClick={() => {
                         if (row.cta_url === '#demo' || !row.cta_url || row.cta_url === '#') {
-                          e.preventDefault();
                           if (onRequestDemo) onRequestDemo();
+                        } else if (row.cta_url.startsWith('#')) {
+                          document.querySelector(row.cta_url)?.scrollIntoView({ behavior: 'smooth' });
                         }
                       }}
-                      className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-bold text-sm group cursor-pointer"
+                      className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-bold text-sm group cursor-pointer transition-colors"
                     >
                       <span>{row.cta_text}</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </button>
                   </div>
                 )}
               </div>

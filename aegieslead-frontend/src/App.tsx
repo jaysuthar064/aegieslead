@@ -12,8 +12,21 @@ import { DynamicSectionRenderer } from './components/DynamicSectionRenderer';
 import { DemoModal } from './components/DemoModal';
 import { SeoHead } from './components/SeoHead';
 
+function getInitialPageFromUrl(): { slug: string; anchor?: string } {
+  const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  const hash = window.location.hash.replace(/^#/, '');
+
+  if (path === 'platform' || hash === 'platform') return { slug: 'platform', anchor: hash };
+  if (path === 'who-we-serve' || path === 'solutions' || hash === 'who-we-serve') return { slug: 'who-we-serve', anchor: hash };
+  if (path === 'pricing' || hash === 'pricing') return { slug: 'pricing', anchor: hash };
+  if (path === 'company' || path === 'security' || hash === 'company') return { slug: 'company', anchor: hash };
+
+  return { slug: 'home', anchor: hash };
+}
+
 function App() {
-  const [currentPage, setCurrentPage] = useState<string>('home');
+  const initial = getInitialPageFromUrl();
+  const [currentPage, setCurrentPage] = useState<string>(initial.slug);
   const [globalSettings, setGlobalSettings] = useState<GlobalSettings>(FALLBACK_GLOBAL_SETTINGS);
   const [pageData, setPageData] = useState<PageData>(FALLBACK_HOME_PAGE);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -43,6 +56,23 @@ function App() {
     loadCmsData(currentPage);
   }, [currentPage, loadCmsData]);
 
+  // Browser History & PopState Support (Back/Forward buttons)
+  useEffect(() => {
+    const handlePopState = () => {
+      const { slug, anchor } = getInitialPageFromUrl();
+      setCurrentPage(slug);
+      if (anchor) {
+        setTimeout(() => {
+          const el = document.getElementById(anchor) || document.querySelector(`[id*="${anchor}"]`);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   // Automatic Background Revalidation (polls every 10s or when window gains focus)
   useEffect(() => {
     const handleFocus = () => {
@@ -60,9 +90,25 @@ function App() {
     };
   }, [currentPage, loadCmsData]);
 
-  const handleSelectPage = (slug: string) => {
+  const handleSelectPage = (slug: string, anchor?: string) => {
     setCurrentPage(slug);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Update browser URL cleanly without page reload
+    const targetUrl = slug === 'home' ? (anchor ? `/#${anchor}` : '/') : `/${slug}${anchor ? `#${anchor}` : ''}`;
+    window.history.pushState({ slug, anchor }, '', targetUrl);
+
+    if (anchor) {
+      setTimeout(() => {
+        const el = document.getElementById(anchor) || document.querySelector(`[id*="${anchor}"]`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleOpenDemoModal = (persona?: string) => {
@@ -114,6 +160,8 @@ function App() {
       <Footer
         footer={globalSettings.footer}
         branding={globalSettings.branding}
+        onNavigate={handleSelectPage}
+        onRequestDemo={handleOpenDemoModal}
       />
 
       {/* Interactive Request a Demo Modal */}

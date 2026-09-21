@@ -5,9 +5,45 @@ import { Shield } from 'lucide-react';
 interface Props {
   footer: FooterSettings;
   branding: BrandingSettings;
+  onNavigate?: (slug: string, anchor?: string) => void;
+  onRequestDemo?: (persona?: string) => void;
 }
 
-export const Footer: React.FC<Props> = ({ footer, branding }) => {
+export const Footer: React.FC<Props> = ({
+  footer,
+  branding,
+  onNavigate,
+  onRequestDemo
+}) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string, label: string) => {
+    e.preventDefault();
+
+    if (label.toLowerCase().includes('demo') || label.toLowerCase().includes('contact sales')) {
+      if (onRequestDemo) {
+        onRequestDemo();
+        return;
+      }
+    }
+
+    if (url.startsWith('#')) {
+      const anchor = url.replace('#', '');
+      if (onNavigate) {
+        onNavigate('home', anchor);
+      } else {
+        document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (url.startsWith('/')) {
+      const slug = url.replace('/', '') || 'home';
+      if (onNavigate) onNavigate(slug);
+    } else if (onNavigate) {
+      if (label.toLowerCase().includes('platform')) onNavigate('platform');
+      else if (label.toLowerCase().includes('solution') || label.toLowerCase().includes('who we serve')) onNavigate('who-we-serve');
+      else if (label.toLowerCase().includes('pricing')) onNavigate('pricing');
+      else if (label.toLowerCase().includes('company') || label.toLowerCase().includes('about')) onNavigate('company');
+      else onNavigate('home');
+    }
+  };
+
   return (
     <footer className="bg-[#090d16] text-slate-400 border-t border-slate-800 pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,11 +53,14 @@ export const Footer: React.FC<Props> = ({ footer, branding }) => {
           
           {/* Brand Identity & Summary (Col 1-2) */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
+            <div
+              className="flex items-center gap-3 cursor-pointer group"
+              onClick={() => onNavigate ? onNavigate('home') : window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <div className="w-8 h-8 rounded-lg bg-blue-700 flex items-center justify-center text-white">
                 <Shield className="w-5 h-5 fill-current" />
               </div>
-              <span className="font-extrabold text-xl tracking-tight text-white font-sans">
+              <span className="font-extrabold text-xl tracking-tight text-white font-sans group-hover:text-blue-400 transition-colors">
                 {branding.logo_text || 'AEGIES LEAD'}
               </span>
             </div>
@@ -31,7 +70,7 @@ export const Footer: React.FC<Props> = ({ footer, branding }) => {
             </p>
 
             <div className="text-xs text-slate-400 space-y-1.5 pt-2">
-              <div>Security & Support: <span className="text-slate-200 font-mono font-medium">{branding.support_email}</span></div>
+              <div>Security & Support: <a href={`mailto:${branding.support_email}`} className="text-slate-200 font-mono font-medium hover:text-blue-400">{branding.support_email}</a></div>
               <div>Direct Dispatch: <span className="text-slate-200 font-mono font-medium">{branding.support_phone}</span></div>
             </div>
           </div>
@@ -47,7 +86,8 @@ export const Footer: React.FC<Props> = ({ footer, branding }) => {
                   <li key={lIdx}>
                     <a
                       href={link.url}
-                      className="text-slate-400 hover:text-white transition-colors"
+                      onClick={(e) => handleLinkClick(e, link.url, link.label)}
+                      className="text-slate-400 hover:text-white transition-colors cursor-pointer"
                     >
                       {link.label}
                     </a>

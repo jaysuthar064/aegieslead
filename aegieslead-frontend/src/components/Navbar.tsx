@@ -20,12 +20,13 @@ import {
 interface Props {
   settings: GlobalSettings;
   currentPage: string;
-  onSelectPage: (slug: string) => void;
+  onSelectPage: (slug: string, anchor?: string) => void;
   onRequestDemo?: (persona?: string) => void;
 }
 
 export const Navbar: React.FC<Props> = ({
   settings,
+  currentPage,
   onSelectPage,
   onRequestDemo
 }) => {
@@ -60,36 +61,53 @@ export const Navbar: React.FC<Props> = ({
     }
   };
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string, id: string) => {
+  const handleTopNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    setActiveMegaMenu(null);
+    setMobileOpen(false);
+
     if (id === 'menu_platform') {
-      e.preventDefault();
       onSelectPage('platform');
-      setActiveMegaMenu(null);
-      setMobileOpen(false);
     } else if (id === 'menu_solutions') {
-      e.preventDefault();
       onSelectPage('who-we-serve');
-      setActiveMegaMenu(null);
-      setMobileOpen(false);
     } else if (id === 'menu_pricing') {
-      e.preventDefault();
       onSelectPage('pricing');
-      setActiveMegaMenu(null);
-      setMobileOpen(false);
     } else if (id === 'menu_company') {
-      e.preventDefault();
       onSelectPage('company');
-      setActiveMegaMenu(null);
-      setMobileOpen(false);
-    } else if (url.startsWith('#')) {
-      const el = document.querySelector(url);
-      if (el) {
-        e.preventDefault();
-        el.scrollIntoView({ behavior: 'smooth' });
-        setActiveMegaMenu(null);
-        setMobileOpen(false);
-      }
+    } else {
+      onSelectPage('home');
     }
+  };
+
+  const handleSubLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+    e.preventDefault();
+    setActiveMegaMenu(null);
+    setMobileOpen(false);
+
+    if (url.startsWith('#')) {
+      const anchor = url.replace('#', '');
+      if (currentPage === 'home') {
+        const el = document.getElementById(anchor) || document.querySelector(url);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          onSelectPage('home', anchor);
+        }
+      } else {
+        onSelectPage('home', anchor);
+      }
+    } else if (url.startsWith('/')) {
+      const pageSlug = url.replace('/', '');
+      onSelectPage(pageSlug || 'home');
+    }
+  };
+
+  const isNavActive = (id: string) => {
+    if (id === 'menu_platform' && currentPage === 'platform') return true;
+    if (id === 'menu_solutions' && currentPage === 'who-we-serve') return true;
+    if (id === 'menu_pricing' && currentPage === 'pricing') return true;
+    if (id === 'menu_company' && currentPage === 'company') return true;
+    return false;
   };
 
   return (
@@ -117,115 +135,111 @@ export const Navbar: React.FC<Props> = ({
 
           {/* Desktop Navigation Links & Mega Menu */}
           <nav className="hidden lg:flex items-center space-x-1">
-            {nav.menu_items?.map((item) => (
-              <div
-                key={item.id}
-                className="relative"
-                onMouseEnter={() => item.has_columns && setActiveMegaMenu(item.id)}
-                onMouseLeave={() => setActiveMegaMenu(null)}
-              >
-                <a
-                  href={item.url}
-                  onClick={(e) => handleNavClick(e, item.url, item.id)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold text-slate-700 hover:text-blue-700 hover:bg-slate-50 transition-colors cursor-pointer"
+            {nav.menu_items?.map((item) => {
+              const active = isNavActive(item.id);
+
+              return (
+                <div
+                  key={item.id}
+                  className="relative"
+                  onMouseEnter={() => item.has_columns && setActiveMegaMenu(item.id)}
+                  onMouseLeave={() => setActiveMegaMenu(null)}
                 >
-                  <span>{item.label}</span>
-                  {item.badge && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
-                      {item.badge}
-                    </span>
-                  )}
-                  {item.has_columns && (
-                    <ChevronDown
-                      className={`w-4 h-4 text-slate-400 transition-transform ${
-                        activeMegaMenu === item.id ? 'rotate-180 text-blue-700' : ''
-                      }`}
-                    />
-                  )}
-                </a>
-
-                {/* Mega Menu Dropdown */}
-                {item.has_columns && activeMegaMenu === item.id && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 w-[740px] bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 pt-5 grid grid-cols-12 gap-6 mt-2 z-50">
-                    
-                    {/* Product Columns */}
-                    <div className="col-span-8 grid grid-cols-2 gap-6">
-                      {item.columns?.map((col, cIdx) => (
-                        <div key={cIdx} className="space-y-3">
-                          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
-                            {col.title}
-                          </h4>
-                          <div className="space-y-1">
-                            {col.links.map((link, lIdx) => (
-                              <a
-                                key={lIdx}
-                                href={link.url}
-                                onClick={(e) => {
-                                  if (link.url.startsWith('#')) {
-                                    const el = document.querySelector(link.url);
-                                    if (el) {
-                                      e.preventDefault();
-                                      el.scrollIntoView({ behavior: 'smooth' });
-                                      setActiveMegaMenu(null);
-                                    }
-                                  }
-                                }}
-                                className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
-                              >
-                                <div className="p-2 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
-                                  {getMenuIcon(link.icon)}
-                                </div>
-                                <div>
-                                  <div className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors leading-tight">
-                                    {link.label}
-                                  </div>
-                                  {link.desc && (
-                                    <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed font-normal">
-                                      {link.desc}
-                                    </p>
-                                  )}
-                                </div>
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Featured Report Card */}
-                    {item.featured_card && (
-                      <div className="col-span-4 rounded-xl bg-slate-900 text-white p-5 flex flex-col justify-between shadow-md">
-                        <div>
-                          <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">
-                            INDUSTRY REPORT
-                          </span>
-                          <h5 className="text-sm font-bold text-white mt-1.5 leading-snug">
-                            {item.featured_card.title}
-                          </h5>
-                          <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                            {item.featured_card.desc}
-                          </p>
-                        </div>
-                        <a
-                          href={item.featured_card.cta_url}
-                          onClick={(e) => {
-                            if (item.featured_card?.cta_url.startsWith('#')) {
-                              e.preventDefault();
-                              document.querySelector('#demo')?.scrollIntoView({ behavior: 'smooth' });
-                              setActiveMegaMenu(null);
-                            }
-                          }}
-                          className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 mt-4 pt-3 border-t border-slate-800 cursor-pointer"
-                        >
-                          {item.featured_card.cta_text}
-                        </a>
-                      </div>
+                  <a
+                    href={item.url}
+                    onClick={(e) => handleTopNavClick(e, item.id)}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer ${
+                      active
+                        ? 'text-blue-700 bg-blue-50/80 font-extrabold shadow-2xs'
+                        : 'text-slate-700 hover:text-blue-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
+                        {item.badge}
+                      </span>
                     )}
+                    {item.has_columns && (
+                      <ChevronDown
+                        className={`w-4 h-4 text-slate-400 transition-transform ${
+                          activeMegaMenu === item.id ? 'rotate-180 text-blue-700' : ''
+                        }`}
+                      />
+                    )}
+                  </a>
 
-                  </div>
-                )}
-              </div>
-            ))}
+                  {/* Mega Menu Dropdown */}
+                  {item.has_columns && activeMegaMenu === item.id && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-[740px] bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 pt-5 grid grid-cols-12 gap-6 mt-2 z-50">
+                      
+                      {/* Product Columns */}
+                      <div className="col-span-8 grid grid-cols-2 gap-6">
+                        {item.columns?.map((col, cIdx) => (
+                          <div key={cIdx} className="space-y-3">
+                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+                              {col.title}
+                            </h4>
+                            <div className="space-y-1">
+                              {col.links.map((link, lIdx) => (
+                                <a
+                                  key={lIdx}
+                                  href={link.url}
+                                  onClick={(e) => handleSubLinkClick(e, link.url)}
+                                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
+                                >
+                                  <div className="p-2 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                                    {getMenuIcon(link.icon)}
+                                  </div>
+                                  <div>
+                                    <div className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors leading-tight">
+                                      {link.label}
+                                    </div>
+                                    {link.desc && (
+                                      <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed font-normal">
+                                        {link.desc}
+                                      </p>
+                                    )}
+                                  </div>
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Featured Report Card */}
+                      {item.featured_card && (
+                        <div className="col-span-4 rounded-xl bg-slate-900 text-white p-5 flex flex-col justify-between shadow-md">
+                          <div>
+                            <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">
+                              INDUSTRY REPORT
+                            </span>
+                            <h5 className="text-sm font-bold text-white mt-1.5 leading-snug">
+                              {item.featured_card.title}
+                            </h5>
+                            <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                              {item.featured_card.desc}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveMegaMenu(null);
+                              if (onRequestDemo) onRequestDemo();
+                            }}
+                            className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 mt-4 pt-3 border-t border-slate-800 cursor-pointer text-left"
+                          >
+                            <span>{item.featured_card.cta_text}</span>
+                          </button>
+                        </div>
+                      )}
+
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           {/* Action Buttons (Ghost & Solid Cobalt Blue) */}
@@ -237,7 +251,7 @@ export const Navbar: React.FC<Props> = ({
                     key={idx}
                     type="button"
                     onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#demo')}
-                    className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/20 cursor-pointer"
+                    className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/20 active:scale-[0.98] cursor-pointer"
                   >
                     {btn.label}
                   </button>
@@ -247,7 +261,7 @@ export const Navbar: React.FC<Props> = ({
                 <a
                   key={idx}
                   href={btn.url}
-                  className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-white hover:bg-slate-50 text-slate-700 border border-slate-300"
+                  className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 active:scale-[0.98]"
                 >
                   {btn.label}
                 </a>
@@ -276,8 +290,12 @@ export const Navbar: React.FC<Props> = ({
               <a
                 key={item.id}
                 href={item.url}
-                onClick={(e) => handleNavClick(e, item.url, item.id)}
-                className="block px-3 py-2.5 rounded-lg text-base font-bold text-slate-800 hover:bg-slate-50 hover:text-blue-700"
+                onClick={(e) => handleTopNavClick(e, item.id)}
+                className={`block px-3 py-2.5 rounded-lg text-base font-bold transition-colors ${
+                  isNavActive(item.id)
+                    ? 'text-blue-700 bg-blue-50 font-extrabold'
+                    : 'text-slate-800 hover:bg-slate-50 hover:text-blue-700'
+                }`}
               >
                 {item.label}
               </a>
