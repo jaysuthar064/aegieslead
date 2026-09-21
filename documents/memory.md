@@ -4,7 +4,15 @@
 
 ---
 
-## 1. Quick Local Environment & Auto-Login Links
+## 1. Git Repository & Remote Status
+
+* **Repository Remote:** `https://github.com/jaysuthar064/aegieslead.git`
+* **Default Branch:** `main` (Pushed & Synchronized)
+* **Clean Ignored Assets:** `node_modules/`, `dist/`, `.kilo/`, logs, caches, and backups excluded via root `.gitignore`.
+
+---
+
+## 2. Quick Local Environment & Auto-Login Links
 
 * **WordPress Site:** `http://localhost:8889`
 * **Auto-Login Admin URL (1-Click Passwordless into Aegies CMS):**  
@@ -18,6 +26,7 @@
   * Who We Serve: `http://localhost:8889/?rest_route=/aegies/v1/page/who-we-serve`
   * Pricing: `http://localhost:8889/?rest_route=/aegies/v1/page/pricing`
   * Company: `http://localhost:8889/?rest_route=/aegies/v1/page/company`
+  * Leads API: `http://localhost:8889/?rest_route=/aegies/v1/leads`
   * Pages Catalog: `http://localhost:8889/?rest_route=/aegies/v1/pages`
 * **React Frontend Directory:** `aegieslead-frontend/` (`http://localhost:5173`)
   * `.env` configured with `VITE_WP_API_URL=http://localhost:8889`
@@ -25,13 +34,13 @@
 
 ---
 
-## 2. Real-Time Headless WordPress Synchronization Engine
+## 3. Real-Time Headless WordPress Synchronization & Open CORS Engine
 
-### Connection & Sync Setup:
+### Connection & Sync Architecture:
 1. **Frontend Environment Configuration (`.env`):**  
    `VITE_WP_API_URL=http://localhost:8889` defines the backend endpoint used by `src/services/cmsApi.ts`.
-2. **CORS Preflight & Header Engine (`mu-plugins/aegies-cors.php`):**  
-   Permits all headers (`Cache-Control`, `Pragma`, `X-Requested-With`, `Authorization`, `Origin`, `Content-Type`), handling preflight `OPTIONS` with `HTTP 200`.
+2. **Open CORS Engine (`.htaccess` & `mu-plugins/aegies-cors.php`):**  
+   Permits all origins (`*` or dynamic origin), all HTTP methods (`GET, POST, PUT, PATCH, DELETE, OPTIONS`), and all headers (`Cache-Control`, `Pragma`, `X-Requested-With`, `Authorization`, `Origin`, `Content-Type`, `If-Modified-Since`, `X-HTTP-Method-Override`) with preflight `OPTIONS` returning `HTTP 200`.
 3. **Multi-Strategy Fallback Connection Pipeline:**  
    `fetchFromWp` attempts connection in order:
    - `VITE_WP_API_URL` query parameter REST endpoint (`?rest_route=/aegies/v1/...`)
@@ -45,7 +54,7 @@
 
 ---
 
-## 3. Production B2B SaaS Design Standard (Trackforce Benchmark)
+## 4. Production B2B SaaS Design Standard (Trackforce Benchmark)
 
 * **Pure Clean Marketing Frontend:** All dev/preview bars and floating pills removed.
 * **White Navigation Mega-Menu:** Clean fixed `#ffffff` header, Royal Blue brand shield, structured multi-column dropdowns for *Field Operations*, *Commercial*, and *Buyer Solutions*.
@@ -62,7 +71,7 @@
 
 ---
 
-## 4. Phase Execution & State Tracking
+## 5. Phase Execution & State Tracking
 
 | Phase | Description | Status | Output / Milestones |
 |---|---|---|---|
@@ -70,5 +79,5 @@
 | **Phase 2** | Custom WordPress CMS Plugin (`aegies-headless-cms`) | ✅ Completed | `wordpress/wp-content/plugins/aegies-headless-cms/` (Sidebar admin menu, section builder, WP Media picker, AJAX save) |
 | **Phase 3** | REST API & Sync Endpoints | ✅ Completed | Dual-format endpoint handler (`/wp-json/` & `?rest_route=`) with automated transient cache invalidation |
 | **Phase 4** | React Frontend Dynamic Section Engine (Trackforce Light Theme) | ✅ Completed | Authentic Trackforce/TrackTik light SaaS aesthetic matching `design-study.md` |
-| **Phase 5** | Live Sync, .env Connection & Dynamic Media Uploads | ✅ Completed | `.env` created, unblockable CORS engine, real-time background revalidation verified |
-| **Phase 6** | End-to-End Verification & Production Readiness | ✅ Completed | Tested WordPress save with custom text & images, verified live fetch returning HTTP 200, build passed in 1.65s |
+| **Phase 5** | Live Sync, Open CORS & Dynamic Media Uploads | ✅ Completed | `.env` created, 100% open CORS engine across `.htaccess` and `mu-plugins`, real-time background revalidation |
+| **Phase 6** | Git Remote Repository Push & Verification | ✅ Completed | Clean repository staged and pushed to `https://github.com/jaysuthar064/aegieslead.git` on branch `main` |
