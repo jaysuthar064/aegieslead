@@ -71,6 +71,15 @@ class Aegies_Headless_CMS {
 			'aegies-headless-cms-global',
 			array( $this, 'render_global_settings_page' )
 		);
+
+		add_submenu_page(
+			'aegies-headless-cms',
+			__( 'Leads & Inquiries', 'aegies-headless-cms' ),
+			__( 'Leads & Inquiries', 'aegies-headless-cms' ),
+			'manage_options',
+			'aegies-headless-cms-leads',
+			array( $this, 'render_leads_page' )
+		);
 	}
 
 	public function enqueue_admin_assets( $hook ) {
@@ -111,6 +120,10 @@ class Aegies_Headless_CMS {
 
 	public function render_global_settings_page() {
 		require_once AEGIES_CMS_PATH . 'includes/admin-global-page.php';
+	}
+
+	public function render_leads_page() {
+		require_once AEGIES_CMS_PATH . 'includes/admin-leads-page.php';
 	}
 
 	public function init_defaults_if_needed() {

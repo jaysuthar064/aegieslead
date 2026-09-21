@@ -4,9 +4,10 @@ import { Shield, ArrowRight, CheckCircle2, Play, Activity, MapPin, Radio, Smartp
 
 interface Props {
   settings: HeroSettings;
+  onRequestDemo?: (persona?: string) => void;
 }
 
-export const HeroSection: React.FC<Props> = ({ settings }) => {
+export const HeroSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900 pt-16 pb-20 md:pt-24 md:pb-28 border-b border-slate-200">
       {/* Subtle Background Pattern */}
@@ -38,21 +39,28 @@ export const HeroSection: React.FC<Props> = ({ settings }) => {
             {/* Action CTAs */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               {settings.primary_cta && (
-                <a
-                  href={settings.primary_cta.url}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-base transition-all shadow-md shadow-blue-700/20 hover:translate-y-[-1px]"
+                <button
+                  type="button"
+                  onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#demo')}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-base transition-all shadow-md shadow-blue-700/20 hover:translate-y-[-1px] cursor-pointer"
                 >
-                  {settings.primary_cta.label}
+                  <span>{settings.primary_cta.label}</span>
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </button>
               )}
               {settings.secondary_cta && (
                 <a
                   href={settings.secondary_cta.url}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-base transition-all shadow-xs"
+                  onClick={(e) => {
+                    if (settings.secondary_cta?.url.startsWith('#')) {
+                      e.preventDefault();
+                      document.querySelector(settings.secondary_cta.url)?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-base transition-all shadow-xs cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-current text-blue-700" />
-                  {settings.secondary_cta.label}
+                  <span>{settings.secondary_cta.label}</span>
                 </a>
               )}
             </div>

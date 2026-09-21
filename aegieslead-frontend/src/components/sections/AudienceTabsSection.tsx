@@ -4,9 +4,10 @@ import { Building2, Users, CheckCircle2, ArrowRight, ShieldAlert, DollarSign, Fi
 
 interface Props {
   settings: AudienceTabsSettings;
+  onRequestDemo?: (persona?: string) => void;
 }
 
-export const AudienceTabsSection: React.FC<Props> = ({ settings }) => {
+export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
   const [activeTab, setActiveTab] = useState<'enterprise' | 'guarding'>('enterprise');
 
   const current = activeTab === 'enterprise' ? settings.tab_enterprise : settings.tab_guarding;
@@ -85,13 +86,14 @@ export const AudienceTabsSection: React.FC<Props> = ({ settings }) => {
               </div>
 
               <div className="pt-4">
-                <a
-                  href="#demo"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm transition-all shadow-md shadow-blue-700/20"
+                <button
+                  type="button"
+                  onClick={() => onRequestDemo ? onRequestDemo(activeTab === 'enterprise' ? 'Enterprise Security Leaders' : 'Guarding Contractor Firms') : (location.hash = '#demo')}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm transition-all shadow-md shadow-blue-700/20 cursor-pointer"
                 >
-                  See Tailored Solution for {activeTab === 'enterprise' ? 'Enterprise Security' : 'Guarding Contractors'}
+                  <span>See Tailored Solution for {activeTab === 'enterprise' ? 'Enterprise Security' : 'Guarding Contractors'}</span>
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </button>
               </div>
             </div>
 

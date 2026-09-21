@@ -4,9 +4,10 @@ import { CheckCircle2, ArrowRight, ShieldCheck, Camera, Sparkles, MapPin } from 
 
 interface Props {
   settings: ZFeaturesSettings;
+  onRequestDemo?: (persona?: string) => void;
 }
 
-export const FeatureZRowsSection: React.FC<Props> = ({ settings }) => {
+export const FeatureZRowsSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
   const rows = settings.rows || [];
 
   const getVisualContent = (badge: string, title: string) => {
@@ -134,9 +135,15 @@ export const FeatureZRowsSection: React.FC<Props> = ({ settings }) => {
                   <div className="pt-4">
                     <a
                       href={row.cta_url || '#demo'}
-                      className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-bold text-sm group"
+                      onClick={(e) => {
+                        if (row.cta_url === '#demo' || !row.cta_url || row.cta_url === '#') {
+                          e.preventDefault();
+                          if (onRequestDemo) onRequestDemo();
+                        }
+                      }}
+                      className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-bold text-sm group cursor-pointer"
                     >
-                      {row.cta_text}
+                      <span>{row.cta_text}</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </a>
                   </div>

@@ -238,3 +238,21 @@ export interface PageSummary {
   activeSections: number;
   updatedAt: string;
 }
+
+export interface LeadPayload {
+  name: string;
+  email: string;
+  company: string;
+  phone?: string;
+  guard_count: string;
+  persona: string;
+  message?: string;
+  source?: string;
+}
+
+export interface LeadResponse {
+  success: boolean;
+  lead_id?: string;
+  message: string;
+  time?: string;
+}

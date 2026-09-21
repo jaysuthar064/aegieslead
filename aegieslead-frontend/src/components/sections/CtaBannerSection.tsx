@@ -4,9 +4,10 @@ import { ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface Props {
   settings: CtaBannerSettings;
+  onRequestDemo?: (persona?: string) => void;
 }
 
-export const CtaBannerSection: React.FC<Props> = ({ settings }) => {
+export const CtaBannerSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
   return (
     <section id="demo" className="py-24 bg-white text-white relative">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -27,22 +28,24 @@ export const CtaBannerSection: React.FC<Props> = ({ settings }) => {
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             {settings.primary_button && (
-              <a
-                href={settings.primary_button.url || '#demo'}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-blue-900 font-extrabold text-base transition-all shadow-xl hover:bg-slate-100 hover:scale-[1.02]"
+              <button
+                type="button"
+                onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#demo')}
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-blue-900 font-extrabold text-base transition-all shadow-xl hover:bg-slate-100 hover:scale-[1.02] cursor-pointer"
               >
-                {settings.primary_button.label || 'Request a Demo'}
+                <span>{settings.primary_button.label || 'Request a Demo'}</span>
                 <ArrowRight className="w-5 h-5 text-blue-800" />
-              </a>
+              </button>
             )}
 
             {settings.secondary_button && (
-              <a
-                href={settings.secondary_button.url || '#contact'}
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-blue-950/60 hover:bg-blue-950 border border-blue-400/40 text-white font-bold text-base transition-all"
+              <button
+                type="button"
+                onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#contact')}
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-blue-950/60 hover:bg-blue-950 border border-blue-400/40 text-white font-bold text-base transition-all cursor-pointer"
               >
-                {settings.secondary_button.label || 'Contact Sales'}
-              </a>
+                <span>{settings.secondary_button.label || 'Contact Sales'}</span>
+              </button>
             )}
           </div>
 

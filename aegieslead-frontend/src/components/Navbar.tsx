@@ -21,11 +21,13 @@ interface Props {
   settings: GlobalSettings;
   currentPage: string;
   onSelectPage: (slug: string) => void;
+  onRequestDemo?: (persona?: string) => void;
 }
 
 export const Navbar: React.FC<Props> = ({
   settings,
-  onSelectPage
+  onSelectPage,
+  onRequestDemo
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
@@ -228,19 +230,29 @@ export const Navbar: React.FC<Props> = ({
 
           {/* Action Buttons (Ghost & Solid Cobalt Blue) */}
           <div className="hidden lg:flex items-center gap-3">
-            {nav.action_buttons?.map((btn, idx) => (
-              <a
-                key={idx}
-                href={btn.url}
-                className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${
-                  btn.variant === 'primary'
-                    ? 'bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/20'
-                    : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300'
-                }`}
-              >
-                {btn.label}
-              </a>
-            ))}
+            {nav.action_buttons?.map((btn, idx) => {
+              if (btn.variant === 'primary' || btn.label.toLowerCase().includes('demo')) {
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#demo')}
+                    className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/20 cursor-pointer"
+                  >
+                    {btn.label}
+                  </button>
+                );
+              }
+              return (
+                <a
+                  key={idx}
+                  href={btn.url}
+                  className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-white hover:bg-slate-50 text-slate-700 border border-slate-300"
+                >
+                  {btn.label}
+                </a>
+              );
+            })}
           </div>
 
           {/* Mobile Hamburger Button */}
@@ -273,15 +285,32 @@ export const Navbar: React.FC<Props> = ({
           </div>
 
           <div className="pt-4 border-t border-slate-200 flex flex-col gap-2">
-            {nav.action_buttons?.map((btn, idx) => (
-              <a
-                key={idx}
-                href={btn.url}
-                className="w-full text-center px-4 py-3 rounded-lg text-sm font-bold bg-blue-700 text-white shadow-sm"
-              >
-                {btn.label}
-              </a>
-            ))}
+            {nav.action_buttons?.map((btn, idx) => {
+              if (btn.variant === 'primary' || btn.label.toLowerCase().includes('demo')) {
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      if (onRequestDemo) onRequestDemo();
+                    }}
+                    className="w-full text-center px-4 py-3 rounded-lg text-sm font-bold bg-blue-700 text-white shadow-sm cursor-pointer"
+                  >
+                    {btn.label}
+                  </button>
+                );
+              }
+              return (
+                <a
+                  key={idx}
+                  href={btn.url}
+                  className="w-full text-center px-4 py-3 rounded-lg text-sm font-bold bg-white text-slate-800 border border-slate-300"
+                >
+                  {btn.label}
+                </a>
+              );
+            })}
           </div>
         </div>
       )}

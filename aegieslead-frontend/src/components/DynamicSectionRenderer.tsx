@@ -12,9 +12,10 @@ import { CtaBannerSection } from './sections/CtaBannerSection';
 
 interface Props {
   sections: CmsSection[];
+  onRequestDemo?: (persona?: string) => void;
 }
 
-export const DynamicSectionRenderer: React.FC<Props> = ({ sections }) => {
+export const DynamicSectionRenderer: React.FC<Props> = ({ sections, onRequestDemo }) => {
   if (!sections || !Array.isArray(sections) || sections.length === 0) {
     return (
       <div className="py-24 text-center text-slate-400">
@@ -33,15 +34,15 @@ export const DynamicSectionRenderer: React.FC<Props> = ({ sections }) => {
       {activeSections.map((sec) => {
         switch (sec.type) {
           case 'hero':
-            return <HeroSection key={sec.id} settings={sec.settings} />;
+            return <HeroSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
           case 'trust_logos':
             return <TrustLogosSection key={sec.id} settings={sec.settings} />;
           case 'audience_tabs':
-            return <AudienceTabsSection key={sec.id} settings={sec.settings} />;
+            return <AudienceTabsSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
           case 'product_showcase':
             return <ProductShowcaseSection key={sec.id} settings={sec.settings} />;
           case 'z_features':
-            return <FeatureZRowsSection key={sec.id} settings={sec.settings} />;
+            return <FeatureZRowsSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
           case 'metrics':
             return <MetricsSection key={sec.id} settings={sec.settings} />;
           case 'case_studies':
@@ -49,7 +50,7 @@ export const DynamicSectionRenderer: React.FC<Props> = ({ sections }) => {
           case 'faq_accordion':
             return <FaqAccordionSection key={sec.id} settings={sec.settings} />;
           case 'cta_banner':
-            return <CtaBannerSection key={sec.id} settings={sec.settings} />;
+            return <CtaBannerSection key={sec.id} settings={sec.settings} onRequestDemo={onRequestDemo} />;
           default:
             return null;
         }
