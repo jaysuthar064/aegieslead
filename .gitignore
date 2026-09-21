@@ -8,15 +8,15 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Environment & Secret Files
+.env
+.env.*
+!.env.example
+
 # Local Assistant & Agent State
 .kilo/
 .kilocode/
 .opencode/
-
-# Environment & Local Overrides
-*.local
-.env.local
-.env.*.local
 
 # Operating System & Editor Files
 .DS_Store
