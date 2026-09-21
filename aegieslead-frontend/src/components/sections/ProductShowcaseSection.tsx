@@ -12,7 +12,7 @@ export const ProductShowcaseSection: React.FC<Props> = ({ settings }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-16 animate-fade-in-up">
           {settings.badge && (
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100 border border-blue-300 text-blue-900 text-xs font-bold uppercase tracking-wider mb-4 font-mono">
               {settings.badge}
@@ -27,7 +27,7 @@ export const ProductShowcaseSection: React.FC<Props> = ({ settings }) => {
         </div>
 
         {/* Big Light-Themed Enterprise Command Center Window or Custom Image */}
-        <div className="relative rounded-3xl bg-white border border-slate-300 shadow-2xl p-4 sm:p-8">
+        <div className="relative rounded-3xl bg-white border border-slate-300 shadow-2xl p-4 sm:p-8 hover-lift">
           
           {settings.image_url ? (
             <div className="rounded-2xl overflow-hidden shadow-inner border border-slate-200">
@@ -65,7 +65,7 @@ export const ProductShowcaseSection: React.FC<Props> = ({ settings }) => {
               <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 {/* Box 1: Shift & Roster Timeline */}
-                <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs hover-lift">
                   <div className="flex justify-between items-center text-xs font-bold text-slate-800 pb-2 border-b border-slate-100">
                     <span className="flex items-center gap-1.5">
                       <Users className="w-4 h-4 text-blue-700" /> ACTIVE SHIFT ROSTER
@@ -91,7 +91,7 @@ export const ProductShowcaseSection: React.FC<Props> = ({ settings }) => {
                 </div>
 
                 {/* Box 2: Patrol Verification */}
-                <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs hover-lift">
                   <div className="flex justify-between items-center text-xs font-bold text-slate-800 pb-2 border-b border-slate-100">
                     <span className="flex items-center gap-1.5">
                       <MapPin className="w-4 h-4 text-blue-700" /> GPS PATROL RADAR
@@ -117,7 +117,7 @@ export const ProductShowcaseSection: React.FC<Props> = ({ settings }) => {
                 </div>
 
                 {/* Box 3: Automated Financials & Billing */}
-                <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs hover-lift">
                   <div className="flex justify-between items-center text-xs font-bold text-slate-800 pb-2 border-b border-slate-100">
                     <span className="flex items-center gap-1.5">
                       <Activity className="w-4 h-4 text-emerald-700" /> MARGIN & BILLING
@@ -146,32 +146,32 @@ export const ProductShowcaseSection: React.FC<Props> = ({ settings }) => {
 
           {/* Floating White Compliance Badges */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-              <div className="p-2 rounded-lg bg-blue-50 text-blue-700">
+            <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover-lift">
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-700">
                 <Lock className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-slate-900 uppercase">SOC 2 Type II Certified</div>
+                <div className="text-xs font-black text-slate-900 uppercase">SOC 2 Type II Certified</div>
                 <div className="text-[11px] text-slate-500">End-to-end encrypted audit logs</div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-              <div className="p-2 rounded-lg bg-emerald-50 text-emerald-700">
+            <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover-lift">
+              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
                 <Server className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-slate-900 uppercase">Sub-Second Dispatch Ping</div>
+                <div className="text-xs font-black text-slate-900 uppercase">Sub-Second Dispatch Ping</div>
                 <div className="text-[11px] text-slate-500">Live GPS geofenced ping tracking</div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-              <div className="p-2 rounded-lg bg-purple-50 text-purple-700">
+            <div className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover-lift">
+              <div className="p-2 rounded-xl bg-purple-50 text-purple-700">
                 <Globe className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs font-bold text-slate-900 uppercase">99.99% Platform Uptime</div>
+                <div className="text-xs font-black text-slate-900 uppercase">99.99% Platform Uptime</div>
                 <div className="text-[11px] text-slate-500">Enterprise mission-critical SLA</div>
               </div>
             </div>

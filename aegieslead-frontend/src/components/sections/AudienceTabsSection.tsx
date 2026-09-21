@@ -4,7 +4,7 @@ import { Building2, Users, CheckCircle2, ArrowRight, ShieldAlert, DollarSign, Fi
 
 interface Props {
   settings: AudienceTabsSettings;
-  onRequestDemo?: (persona?: string) => void;
+  onRequestDemo?: (persona?: string, mode?: 'demo' | 'sales') => void;
 }
 
 export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
@@ -24,47 +24,49 @@ export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 mb-4">
             {settings.heading}
           </h2>
-          <p className="text-lg text-slate-600">
+          <p className="text-lg text-slate-600 leading-relaxed font-normal">
             {settings.subheading}
           </p>
         </div>
 
-        {/* Tab Switcher Buttons */}
+        {/* Segmented Tab Switcher Buttons */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 border border-slate-300 shadow-inner">
+          <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 border border-slate-200 shadow-inner">
             <button
               onClick={() => setActiveTab('enterprise')}
-              className={`flex items-center gap-3 px-7 py-3.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-3 px-7 py-3.5 rounded-xl text-sm font-extrabold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                 activeTab === 'enterprise'
-                  ? 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
+                  ? 'bg-blue-700 text-white shadow-md shadow-blue-700/25 scale-[1.02]'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
               <Building2 className="w-4 h-4" />
-              {settings.tab_enterprise?.tab_title || 'Enterprise Security Leaders'}
+              <span>{settings.tab_enterprise?.tab_title || 'Enterprise Security Leaders'}</span>
             </button>
 
             <button
               onClick={() => setActiveTab('guarding')}
-              className={`flex items-center gap-3 px-7 py-3.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-3 px-7 py-3.5 rounded-xl text-sm font-extrabold transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                 activeTab === 'guarding'
-                  ? 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
+                  ? 'bg-blue-700 text-white shadow-md shadow-blue-700/25 scale-[1.02]'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
               <Users className="w-4 h-4" />
-              {settings.tab_guarding?.tab_title || 'Security Guarding Firms'}
+              <span>{settings.tab_guarding?.tab_title || 'Security Guarding Firms'}</span>
             </button>
           </div>
         </div>
 
         {/* Tab Content Display Card */}
         {current && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-slate-50 border border-slate-200 rounded-3xl p-8 sm:p-12 shadow-xl">
-            
+          <div
+            key={activeTab}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-slate-50 border border-slate-200/90 rounded-3xl p-8 sm:p-12 shadow-xl animate-fade-in-up hover-lift"
+          >
             {/* Left Col (7 cols): Copy, Bullets, and CTA */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-block px-3 py-1 rounded-md bg-blue-100/70 border border-blue-300 text-blue-800 text-xs font-bold font-mono uppercase tracking-wide">
+              <div className="inline-block px-3 py-1 rounded-md bg-blue-100/80 border border-blue-300 text-blue-800 text-xs font-bold font-mono uppercase tracking-wide">
                 {current.tagline}
               </div>
 
@@ -72,7 +74,7 @@ export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }
                 {current.headline}
               </h3>
 
-              <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
+              <p className="text-slate-600 text-base sm:text-lg leading-relaxed font-normal">
                 {current.description}
               </p>
 
@@ -88,8 +90,8 @@ export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }
               <div className="pt-4">
                 <button
                   type="button"
-                  onClick={() => onRequestDemo ? onRequestDemo(activeTab === 'enterprise' ? 'Enterprise Security Leaders' : 'Guarding Contractor Firms') : (location.hash = '#demo')}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm transition-all shadow-md shadow-blue-700/20 cursor-pointer"
+                  onClick={() => onRequestDemo ? onRequestDemo(activeTab === 'enterprise' ? 'Enterprise Security Leaders' : 'Guarding Contractor Firms', 'demo') : (location.hash = '#demo')}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-sm transition-all shadow-md shadow-blue-700/20 active:scale-[0.98] button-shimmer cursor-pointer"
                 >
                   <span>See Tailored Solution for {activeTab === 'enterprise' ? 'Enterprise Security' : 'Guarding Contractors'}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -99,7 +101,7 @@ export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }
 
             {/* Right Col (5 cols): Navy Accent Operational Proof Card */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="p-7 rounded-2xl bg-slate-900 text-white border border-slate-800 space-y-5 shadow-2xl">
+              <div className="p-7 rounded-3xl bg-slate-900 text-white border border-slate-800 space-y-5 shadow-2xl">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                   <span className="text-xs font-mono font-bold text-blue-400">OPERATIONAL CAPABILITIES</span>
                   <FileCheck className="w-4 h-4 text-emerald-400" />
@@ -107,28 +109,28 @@ export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }
 
                 {activeTab === 'enterprise' ? (
                   <div className="space-y-3">
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
+                    <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
                       <div className="font-bold text-white mb-1 flex items-center gap-2 text-sm">
                         <ShieldAlert className="w-4 h-4 text-blue-400" />
                         Multi-Site Risk Oversight
                       </div>
                       Real-time dashboard aggregates incident escalations across all contracted security vendors.
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
+                    <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
                       <div className="font-bold text-white mb-1 text-sm">Automated SLA Compliance</div>
                       Instant verification of minimum staffing levels, patrol timings, and COI certificate expiries.
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
+                    <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
                       <div className="font-bold text-white mb-1 flex items-center gap-2 text-sm">
                         <DollarSign className="w-4 h-4 text-emerald-400" />
                         Direct Timesheet-to-Invoice
                       </div>
                       Converts verified clock-ins directly into client-ready invoices, eliminating payroll leakage.
                     </div>
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
+                    <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300">
                       <div className="font-bold text-white mb-1 text-sm">AI Proposal Scoping Engine</div>
                       Draft RFP bids, rate cards, and SLA contracts in under 5 minutes with AI recommendations.
                     </div>
@@ -136,7 +138,7 @@ export const AudienceTabsSection: React.FC<Props> = ({ settings, onRequestDemo }
                 )}
 
                 {current.stat_badge && (
-                  <div className="p-4 rounded-xl bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 text-xs font-bold text-center">
+                  <div className="p-4 rounded-2xl bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 text-xs font-bold text-center animate-pulse-glow">
                     ✓ {current.stat_badge}
                   </div>
                 )}

@@ -14,7 +14,8 @@ import {
   Briefcase,
   Building2,
   CheckCircle,
-  Activity
+  Activity,
+  ArrowRight
 } from 'lucide-react';
 
 interface Props {
@@ -114,13 +115,13 @@ export const Navbar: React.FC<Props> = ({
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-200 shadow-xs">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* Brand Logo */}
+          {/* 1. Left: Brand Logo & Shield */}
           <div
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center gap-3 cursor-pointer group shrink-0"
             onClick={() => onSelectPage('home')}
           >
             <div className="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-700/20 group-hover:bg-blue-800 transition-colors">
@@ -136,7 +137,7 @@ export const Navbar: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Desktop Navigation Links & Mega Menu */}
+          {/* 2. Center: Desktop Navigation Links & Mega Menu */}
           <nav className="hidden lg:flex items-center space-x-1">
             {nav.menu_items?.map((item) => {
               const active = isNavActive(item.id);
@@ -151,9 +152,9 @@ export const Navbar: React.FC<Props> = ({
                   <a
                     href={item.url}
                     onClick={(e) => handleTopNavClick(e, item.id)}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                       active
-                        ? 'text-blue-700 bg-blue-50/80 font-extrabold shadow-2xs'
+                        ? 'text-blue-700 bg-blue-50/90 font-extrabold shadow-2xs'
                         : 'text-slate-700 hover:text-blue-700 hover:bg-slate-50'
                     }`}
                   >
@@ -174,7 +175,7 @@ export const Navbar: React.FC<Props> = ({
 
                   {/* Mega Menu Dropdown */}
                   {item.has_columns && activeMegaMenu === item.id && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-[740px] bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 pt-5 grid grid-cols-12 gap-6 mt-2 z-50">
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-[740px] bg-white border border-slate-200 rounded-3xl shadow-2xl p-6 pt-5 grid grid-cols-12 gap-6 mt-2 z-50 animate-fade-in-up">
                       
                       {/* Product Columns */}
                       <div className="col-span-8 grid grid-cols-2 gap-6">
@@ -189,9 +190,9 @@ export const Navbar: React.FC<Props> = ({
                                   key={lIdx}
                                   href={link.url}
                                   onClick={(e) => handleSubLinkClick(e, link.url)}
-                                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group cursor-pointer"
+                                  className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-slate-50 transition-all group cursor-pointer"
                                 >
-                                  <div className="p-2 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                                  <div className="p-2 rounded-xl bg-blue-50 group-hover:bg-blue-100 transition-colors">
                                     {getMenuIcon(link.icon)}
                                   </div>
                                   <div>
@@ -213,7 +214,7 @@ export const Navbar: React.FC<Props> = ({
 
                       {/* Featured Report Card */}
                       {item.featured_card && (
-                        <div className="col-span-4 rounded-xl bg-slate-900 text-white p-5 flex flex-col justify-between shadow-md">
+                        <div className="col-span-4 rounded-2xl bg-slate-900 text-white p-5 flex flex-col justify-between shadow-md">
                           <div>
                             <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">
                               INDUSTRY REPORT
@@ -229,11 +230,12 @@ export const Navbar: React.FC<Props> = ({
                             type="button"
                             onClick={() => {
                               setActiveMegaMenu(null);
-                              if (onRequestDemo) onRequestDemo();
+                              if (onRequestDemo) onRequestDemo('Enterprise Security Leaders', 'demo');
                             }}
-                            className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 mt-4 pt-3 border-t border-slate-800 cursor-pointer text-left"
+                            className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 mt-4 pt-3 border-t border-slate-800 cursor-pointer text-left group"
                           >
                             <span>{item.featured_card.cta_text}</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                           </button>
                         </div>
                       )}
@@ -245,38 +247,31 @@ export const Navbar: React.FC<Props> = ({
             })}
           </nav>
 
-          {/* Action Buttons (Ghost & Solid Cobalt Blue) */}
-          <div className="hidden lg:flex items-center gap-3">
-            {nav.action_buttons?.map((btn, idx) => {
-              if (btn.variant === 'primary' || btn.label.toLowerCase().includes('demo')) {
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#demo')}
-                    className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/20 active:scale-[0.98] cursor-pointer"
-                  >
-                    {btn.label}
-                  </button>
-                );
-              }
-              return (
-                <a
-                  key={idx}
-                  href={btn.url}
-                  className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 active:scale-[0.98]"
-                >
-                  {btn.label}
-                </a>
-              );
-            })}
+          {/* 3. Right: Action Area (Contact Sales & Request a Demo) */}
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={() => onRequestDemo ? onRequestDemo('Enterprise Security Leaders', 'sales') : (location.hash = '#contact')}
+              className="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:text-blue-700 hover:bg-slate-100 transition-all cursor-pointer active:scale-[0.98]"
+            >
+              Contact Sales
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onRequestDemo ? onRequestDemo('Enterprise Security Leaders', 'demo') : (location.hash = '#demo')}
+              className="px-5 py-2.5 rounded-xl text-sm font-extrabold transition-all bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/20 active:scale-[0.98] cursor-pointer button-shimmer flex items-center gap-2"
+            >
+              <span>Request a Demo</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
 
           {/* Mobile Hamburger Button */}
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+              className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer transition-colors"
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -287,14 +282,14 @@ export const Navbar: React.FC<Props> = ({
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 px-4 py-6 space-y-4 shadow-xl">
+        <div className="lg:hidden bg-white border-b border-slate-200 px-5 py-6 space-y-4 shadow-xl animate-fade-in-up">
           <div className="space-y-1">
             {nav.menu_items?.map((item) => (
               <a
                 key={item.id}
                 href={item.url}
                 onClick={(e) => handleTopNavClick(e, item.id)}
-                className={`block px-3 py-2.5 rounded-lg text-base font-bold transition-colors ${
+                className={`block px-4 py-3 rounded-xl text-base font-bold transition-colors ${
                   isNavActive(item.id)
                     ? 'text-blue-700 bg-blue-50 font-extrabold'
                     : 'text-slate-800 hover:bg-slate-50 hover:text-blue-700'
@@ -305,33 +300,28 @@ export const Navbar: React.FC<Props> = ({
             ))}
           </div>
 
-          <div className="pt-4 border-t border-slate-200 flex flex-col gap-2">
-            {nav.action_buttons?.map((btn, idx) => {
-              if (btn.variant === 'primary' || btn.label.toLowerCase().includes('demo')) {
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setMobileOpen(false);
-                      if (onRequestDemo) onRequestDemo();
-                    }}
-                    className="w-full text-center px-4 py-3 rounded-lg text-sm font-bold bg-blue-700 text-white shadow-sm cursor-pointer"
-                  >
-                    {btn.label}
-                  </button>
-                );
-              }
-              return (
-                <a
-                  key={idx}
-                  href={btn.url}
-                  className="w-full text-center px-4 py-3 rounded-lg text-sm font-bold bg-white text-slate-800 border border-slate-300"
-                >
-                  {btn.label}
-                </a>
-              );
-            })}
+          <div className="pt-4 border-t border-slate-200 flex flex-col gap-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                if (onRequestDemo) onRequestDemo('Enterprise Security Leaders', 'sales');
+              }}
+              className="w-full text-center py-3 rounded-xl text-sm font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 cursor-pointer"
+            >
+              Contact Sales
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                if (onRequestDemo) onRequestDemo('Enterprise Security Leaders', 'demo');
+              }}
+              className="w-full text-center py-3 rounded-xl text-sm font-extrabold bg-blue-700 hover:bg-blue-800 text-white shadow-md shadow-blue-700/25 cursor-pointer"
+            >
+              Request a Demo
+            </button>
           </div>
         </div>
       )}
