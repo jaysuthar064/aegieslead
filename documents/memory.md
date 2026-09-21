@@ -28,26 +28,24 @@
 
 ---
 
-## 2. Cinematic Motion Design & Interactive Architecture
+## 2. High-End Editorial Art Direction (Awwwards Grade)
 
-* **Interactive Custom Cursor (`CustomCursor.tsx`):** Precision 6px center dot paired with a spring-lerped trailing ring that expands on interactive elements (`button`, `a`, `select`, `input`, `textarea`), with automatic touch-screen deactivation.
-* **Magnetic Button Pull (`Magnetic.tsx`):** Spring dampening pull physics drawing buttons toward cursor position on hover.
-* **3D Perspective Card Tilt (`TiltCard.tsx`):** Dynamic 3D perspective rotation (`perspective(1200px) rotateX(...) rotateY(...)`) with dynamic specular lighting glare overlays tracking cursor coordinates.
-* **Dramatic Typography & Scroll Reveal (`TextReveal.tsx`, `ScrollReveal.tsx`):** Word-by-word clip mask transitions and staggered scroll-triggered reveals using native `IntersectionObserver` with hardware-accelerated transforms.
-* **Pinned Horizontal Storytelling Reel (`HorizontalStoryReel.tsx`):** Interactive horizontal feature carousel showcasing the 4 core pillars with step counters, tab track selectors, and 3D tilt stat cards.
-* **Infinite Logo Marquee Slider (`TrustLogosSection.tsx`):** Smooth continuous loop with edge gradient fade masks and hover-pause capability.
-* **Full Accessibility & Reduced Motion:** Native `@media (prefers-reduced-motion: reduce)` support instantly disables intensive motion for users with vestibular sensitivities.
+Moved entirely away from the generic "SaaS template" aesthetic (excessive gradients, glassmorphism, glowing blobs, soft borders) towards a highly cinematic, art-directed editorial experience.
+
+* **Typography-First Strategy:** Dramatic oversized tracking (`font-serif`, `tracking-tighter`, `leading-none`) for headlines, contrasting with crisp technical mono-spaced data labels (`tracking-widest`, `text-[10px]`).
+* **Stark Restrained Palette:** Strict monochrome (`#111111`, `#f9f9f9`, `#ffffff`) with ultra-fine `1px` crisp grid borders (`border-black/5`).
+* **Cinematic Scroll Choreography:** Custom `clip-path` polygon mask reveals (`animate-mask-up`) for images and a staggered line-by-line masked typography reveal (`TextReveal.tsx`) replacing generic soft fades.
+* **Sharp Brutalist Interaction:** Completely flat interactive components, sharp unrounded edges, severe contrast inversions on hover (`btn-editorial`), and line slide/grow micro-interactions instead of floaty shadow lifts.
+* **Abstract Data Imagery:** Removed generic 3D mockups. Images default to grayscale, high-contrast, or use abstract typographic data grids (`DATA_STREAM [ ACTIVE ]`) when no image is supplied.
 
 ---
 
-## 3. Multi-Page Architecture & Content Inventory
+## 3. Cinematic Motion Design & Interactive Architecture
 
-1. **Home (`/`):** Unified Operating System for Physical Security (Hero, Infinite Logo Marquee Slider, Dual Persona Switcher, Pinned Story Reel, Command Center Interface, Z-Pattern Features, Metrics Bar, Case Studies, FAQ, Dual CTA).
-2. **Platform Architecture (`/platform`):** Comprehensive Technical Capabilities (Sub-Second GPS Dispatch, Chain-of-Custody Incident Management, Automated Invoicing, Performance Benchmarks, FAQ).
-3. **Who We Serve / Solutions (`/who-we-serve`):** Enterprise Security Teams vs. Guarding Contractor Agencies vs. Industry Verticals (Commercial Real Estate, Healthcare Systems, Critical Infrastructure NERC CIP).
-4. **Workforce Management & Mobile Guard (`/workforce`):** Offline-First Guard Mobile Portal, NFC Checkpoint Scanning, Emergency Duress / Panic Alerts, Shift Rostering & Attendance Reminders.
-5. **Pricing & ROI (`/pricing`):** Transparent Guard Capacity Tiers (Starter, Professional, Enterprise Scale), ROI Calculator (3.4x Annual ROI), Feature Comparison Matrix, Licensing FAQ.
-6. **Company, Security & Trust (`/company`):** Security Governance (SOC 2 Type II, ISO 27001, GDPR, HIPAA), 99.99% AWS Multi-Region Infrastructure, System Status.
+* **Interactive Custom Cursor (`CustomCursor.tsx`):** Precision 6px center dot paired with a spring-interpolated trailing ambient ring. Auto-disables on touch.
+* **Magnetic Button Pull (`Magnetic.tsx`):** Spring dampening pull physics drawing buttons toward cursor position on hover.
+* **Oversized Horizontal Typography Reels:** Native smooth horizontal scrolling snap points `snap-x snap-mandatory` preserving accessibility.
+* **Full Accessibility & Reduced Motion:** Native `@media (prefers-reduced-motion: reduce)` rules instantly kill intense transforms and mask unrolls for users with vestibular sensitivities.
 
 ---
 
@@ -58,6 +56,7 @@
 | **Phase 1** | Core Architecture & Data Schema Specification | ✅ Complete | `HEADLESS_WP_PHASE_ROADMAP.md`, `memory.md`, JSON schemas for pages and dynamic sections |
 | **Phase 2** | Custom WordPress CMS Plugin (`aegies-headless-cms`) | ✅ Complete | Native WP Admin sidebar menu, page selector tabs, section accordions, native `wp.media` modal, AJAX save |
 | **Phase 3** | High-Performance REST API & Open CORS Layer | ✅ Complete | Endpoints `/global`, `/pages`, `/page/{slug}`, `/leads`, 100% open CORS in `.htaccess` and `mu-plugins` |
-| **Phase 4** | React Frontend Dynamic Section Engine | ✅ Complete | High-contrast Trackforce 1:1 light SaaS design system matching `design-study.md` |
+| **Phase 4** | React Frontend Dynamic Section Engine | ✅ Complete | High-contrast B2B SaaS React component structures |
 | **Phase 5** | Live Sync, .env Security & Media Pipeline | ✅ Complete | Background revalidation, `.env` gitignore security, dynamic image upload rendering |
-| **Phase 6** | Cinematic Motion Design, Multi-Page & Leads Suite | ✅ Complete | Custom cursor, magnetic buttons, 3D card tilt, horizontal story reel, dual modal, 6 rich pages |
+| **Phase 6** | Multi-Page Architecture, Leads Suite & Routing | ✅ Complete | 6 rich pages, multi-route engine, dual Leads modal (`demo` vs `sales`) |
+| **Phase 7** | Editorial Art Direction & Cinematic Motion Overhaul | ✅ Complete | Complete shift to Awwwards-grade stark typography, mask-unroll motion, & thin-grid brutalist aesthetic |
