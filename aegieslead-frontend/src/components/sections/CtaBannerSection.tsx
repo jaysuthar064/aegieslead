@@ -1,10 +1,10 @@
 import React from 'react';
 import type { CtaBannerSettings } from '../../types/cms';
-import { ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Sparkles, PhoneCall } from 'lucide-react';
 
 interface Props {
   settings: CtaBannerSettings;
-  onRequestDemo?: (persona?: string) => void;
+  onRequestDemo?: (persona?: string, mode?: 'demo' | 'sales') => void;
 }
 
 export const CtaBannerSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
@@ -30,8 +30,8 @@ export const CtaBannerSection: React.FC<Props> = ({ settings, onRequestDemo }) =
             {settings.primary_button && (
               <button
                 type="button"
-                onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#demo')}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-blue-900 font-extrabold text-base transition-all shadow-xl hover:bg-slate-100 hover:scale-[1.02] cursor-pointer"
+                onClick={() => onRequestDemo ? onRequestDemo('Enterprise Security Leaders', 'demo') : (location.hash = '#demo')}
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-blue-900 font-extrabold text-base transition-all shadow-xl hover:bg-slate-100 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
                 <span>{settings.primary_button.label || 'Request a Demo'}</span>
                 <ArrowRight className="w-5 h-5 text-blue-800" />
@@ -41,10 +41,11 @@ export const CtaBannerSection: React.FC<Props> = ({ settings, onRequestDemo }) =
             {settings.secondary_button && (
               <button
                 type="button"
-                onClick={() => onRequestDemo ? onRequestDemo() : (location.hash = '#contact')}
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-blue-950/60 hover:bg-blue-950 border border-blue-400/40 text-white font-bold text-base transition-all cursor-pointer"
+                onClick={() => onRequestDemo ? onRequestDemo('Enterprise Security Leaders', 'sales') : (location.hash = '#contact')}
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-blue-950/60 hover:bg-blue-950 border border-blue-400/40 text-white font-bold text-base transition-all active:scale-[0.98] cursor-pointer"
               >
-                <span>{settings.secondary_button.label || 'Contact Sales'}</span>
+                <PhoneCall className="w-4 h-4 text-blue-300" />
+                <span>{settings.secondary_button.label || 'Contact Enterprise Sales'}</span>
               </button>
             )}
           </div>

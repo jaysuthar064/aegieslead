@@ -21,7 +21,7 @@ interface Props {
   settings: GlobalSettings;
   currentPage: string;
   onSelectPage: (slug: string, anchor?: string) => void;
-  onRequestDemo?: (persona?: string) => void;
+  onRequestDemo?: (persona?: string, mode?: 'demo' | 'sales') => void;
 }
 
 export const Navbar: React.FC<Props> = ({
@@ -70,6 +70,8 @@ export const Navbar: React.FC<Props> = ({
       onSelectPage('platform');
     } else if (id === 'menu_solutions') {
       onSelectPage('who-we-serve');
+    } else if (id === 'menu_workforce') {
+      onSelectPage('workforce');
     } else if (id === 'menu_pricing') {
       onSelectPage('pricing');
     } else if (id === 'menu_company') {
@@ -105,6 +107,7 @@ export const Navbar: React.FC<Props> = ({
   const isNavActive = (id: string) => {
     if (id === 'menu_platform' && currentPage === 'platform') return true;
     if (id === 'menu_solutions' && currentPage === 'who-we-serve') return true;
+    if (id === 'menu_workforce' && currentPage === 'workforce') return true;
     if (id === 'menu_pricing' && currentPage === 'pricing') return true;
     if (id === 'menu_company' && currentPage === 'company') return true;
     return false;

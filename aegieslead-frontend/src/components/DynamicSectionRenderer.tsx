@@ -12,7 +12,7 @@ import { CtaBannerSection } from './sections/CtaBannerSection';
 
 interface Props {
   sections: CmsSection[];
-  onRequestDemo?: (persona?: string) => void;
+  onRequestDemo?: (persona?: string, mode?: 'demo' | 'sales') => void;
 }
 
 export const DynamicSectionRenderer: React.FC<Props> = ({ sections, onRequestDemo }) => {

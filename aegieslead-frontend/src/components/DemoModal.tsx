@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { X, Shield, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Shield, CheckCircle2, ArrowRight, Loader2, Calendar, DollarSign } from 'lucide-react';
 import { submitLeadInquiry } from '../services/cmsApi';
+
+export type ModalMode = 'demo' | 'sales';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  initialMode?: ModalMode;
   defaultPersona?: string;
   sourcePage?: string;
 }
@@ -12,20 +15,34 @@ interface Props {
 export const DemoModal: React.FC<Props> = ({
   isOpen,
   onClose,
+  initialMode = 'demo',
   defaultPersona = 'Enterprise Security Leaders',
   sourcePage = 'home'
 }) => {
+  const [mode, setMode] = useState<ModalMode>(initialMode);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [phone, setPhone] = useState('');
+  
+  // Demo Specific Fields
   const [guardCount, setGuardCount] = useState('26-100 guards');
   const [persona, setPersona] = useState(defaultPersona);
+  const [featureInterest, setFeatureInterest] = useState('GPS Patrol Radar & Checkpoints');
+
+  // Sales / Quote Specific Fields
+  const [siteCount, setSiteCount] = useState('6 - 25 Sites');
+  const [timeline, setTimeline] = useState('Within 30 days (Active Procurement)');
   const [message, setMessage] = useState('');
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    setMode(initialMode);
+    setIsSuccess(false);
+  }, [initialMode, isOpen]);
 
   if (!isOpen) return null;
 
@@ -40,15 +57,19 @@ export const DemoModal: React.FC<Props> = ({
     setErrorMessage('');
 
     try {
+      const notesPayload = mode === 'demo'
+        ? `[DEMO REQUEST] Persona: ${persona} | Feature Interest: ${featureInterest} | Notes: ${message || 'None'}`
+        : `[SALES / RFP QUOTE] Site Volume: ${siteCount} | Timeline: ${timeline} | Requirements: ${message || 'None'}`;
+
       const res = await submitLeadInquiry({
         name,
         email,
         company,
         phone,
-        guard_count: guardCount,
-        persona,
-        message,
-        source: sourcePage,
+        guard_count: mode === 'demo' ? guardCount : `${siteCount} sites`,
+        persona: mode === 'demo' ? persona : `Procurement: ${timeline}`,
+        message: notesPayload,
+        source: `${sourcePage} (${mode.toUpperCase()})`,
       });
 
       if (res.success) {
@@ -78,7 +99,7 @@ export const DemoModal: React.FC<Props> = ({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs transition-opacity"
         onClick={handleResetAndClose}
       />
 
@@ -89,14 +110,16 @@ export const DemoModal: React.FC<Props> = ({
           <div className="bg-slate-900 px-6 py-5 text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-blue-700 text-white shadow-xs">
-                <Shield className="w-5 h-5" />
+                {mode === 'demo' ? <Calendar className="w-5 h-5" /> : <DollarSign className="w-5 h-5" />}
               </div>
               <div>
                 <h3 className="text-lg font-black tracking-tight text-white font-sans leading-none">
-                  Request a Personalized Demo
+                  {mode === 'demo' ? 'Schedule a 1-on-1 Product Demo' : 'Contact Enterprise Sales & Pricing'}
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  Connect with an enterprise physical security architect
+                  {mode === 'demo'
+                    ? 'Guided walkthrough with a security solutions architect'
+                    : 'Custom volume rate cards, SLA modeling, and RFP assistance'}
                 </p>
               </div>
             </div>
@@ -109,6 +132,37 @@ export const DemoModal: React.FC<Props> = ({
             </button>
           </div>
 
+          {/* Mode Selector Tabs */}
+          {!isSuccess && (
+            <div className="flex border-b border-slate-200 bg-slate-50 px-6 pt-3">
+              <button
+                type="button"
+                onClick={() => setMode('demo')}
+                className={`flex items-center gap-2 pb-3 px-3 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+                  mode === 'demo'
+                    ? 'border-blue-700 text-blue-700 font-extrabold'
+                    : 'border-transparent text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Live Software Demo</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setMode('sales')}
+                className={`flex items-center gap-2 pb-3 px-3 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+                  mode === 'sales'
+                    ? 'border-blue-700 text-blue-700 font-extrabold'
+                    : 'border-transparent text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                <DollarSign className="w-4 h-4" />
+                <span>Sales & Custom Quote</span>
+              </button>
+            </div>
+          )}
+
           {/* Body Content */}
           <div className="p-6 sm:p-8">
             {isSuccess ? (
@@ -117,10 +171,10 @@ export const DemoModal: React.FC<Props> = ({
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <h4 className="text-2xl font-black text-slate-900">
-                  Demo Request Received!
+                  {mode === 'demo' ? 'Demo Walkthrough Requested!' : 'Quote Inquiry Received!'}
                 </h4>
                 <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                  Thank you, <strong className="text-slate-900">{name || 'there'}</strong>. Your request has been dispatched to our security engineering team. We will review your site profile and reach out within 2 hours.
+                  Thank you, <strong className="text-slate-900">{name || 'there'}</strong>. We have logged your request for <strong className="text-slate-900">{company || 'your organization'}</strong>. An enterprise security specialist will review your operational requirements and reach out within 2 hours.
                 </p>
 
                 <div className="pt-4">
@@ -151,7 +205,7 @@ export const DemoModal: React.FC<Props> = ({
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="e.g. John Miller"
+                      placeholder="e.g. Marcus Jenkins"
                       className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
                     />
                   </div>
@@ -165,7 +219,7 @@ export const DemoModal: React.FC<Props> = ({
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@company.com"
+                      placeholder="name@organization.com"
                       className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
                     />
                   </div>
@@ -174,21 +228,21 @@ export const DemoModal: React.FC<Props> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
-                      Company / Firm *
+                      Company / Security Agency *
                     </label>
                     <input
                       type="text"
                       required
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
-                      placeholder="Vanguard Security"
+                      placeholder="Vanguard Security Services"
                       className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
-                      Phone Number
+                      Direct Phone Number
                     </label>
                     <input
                       type="tel"
@@ -200,49 +254,106 @@ export const DemoModal: React.FC<Props> = ({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
-                      Guard Capacity
-                    </label>
-                    <select
-                      value={guardCount}
-                      onChange={(e) => setGuardCount(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
-                    >
-                      <option value="1-25 guards">1 - 25 Active Guards</option>
-                      <option value="26-100 guards">26 - 100 Active Guards</option>
-                      <option value="101-500 guards">101 - 500 Active Guards</option>
-                      <option value="500+ guards">500+ Enterprise Guards</option>
-                    </select>
-                  </div>
+                {/* Mode 1: Demo Fields */}
+                {mode === 'demo' ? (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
+                          Active Guard Roster Scale
+                        </label>
+                        <select
+                          value={guardCount}
+                          onChange={(e) => setGuardCount(e.target.value)}
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
+                        >
+                          <option value="1-25 guards">1 - 25 Active Guards</option>
+                          <option value="26-100 guards">26 - 100 Active Guards</option>
+                          <option value="101-500 guards">101 - 500 Active Guards</option>
+                          <option value="500+ guards">500+ Enterprise Officers</option>
+                        </select>
+                      </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
-                      Operational Persona
-                    </label>
-                    <select
-                      value={persona}
-                      onChange={(e) => setPersona(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
-                    >
-                      <option value="Enterprise Security Leaders">Enterprise Security Leaders</option>
-                      <option value="Guarding Contractor Firms">Security Guarding Contractor</option>
-                      <option value="Critical Infrastructure">Critical Infrastructure & Ports</option>
-                      <option value="Healthcare Facilities">Healthcare & Hospital Campuses</option>
-                    </select>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
+                          Primary Demo Interest
+                        </label>
+                        <select
+                          value={featureInterest}
+                          onChange={(e) => setFeatureInterest(e.target.value)}
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
+                        >
+                          <option value="GPS Patrol Radar & Checkpoints">GPS Patrol Radar & Checkpoints</option>
+                          <option value="Incident Evidence Chain-of-Custody">Incident Evidence Chain-of-Custody</option>
+                          <option value="Automated Timesheet-to-Invoice">Automated Timesheet-to-Invoice</option>
+                          <option value="AI Proposal Generator & RFP Bids">AI Proposal Generator & RFP Bids</option>
+                          <option value="Guard Mobile Offline App">Guard Mobile Offline App</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
+                        Operational Persona
+                      </label>
+                      <select
+                        value={persona}
+                        onChange={(e) => setPersona(e.target.value)}
+                        className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
+                      >
+                        <option value="Enterprise Security Leaders">Enterprise Corporate Security (In-House)</option>
+                        <option value="Guarding Contractor Firms">Security Guarding Contractor Agency</option>
+                        <option value="Critical Infrastructure">Critical Infrastructure & Utilities</option>
+                        <option value="Healthcare Facilities">Healthcare & Hospital Campuses</option>
+                      </select>
+                    </div>
+                  </>
+                ) : (
+                  /* Mode 2: Sales / Quote Fields */
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
+                        Monitored Sites / Facilities
+                      </label>
+                      <select
+                        value={siteCount}
+                        onChange={(e) => setSiteCount(e.target.value)}
+                        className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
+                      >
+                        <option value="1 - 5 Sites">1 - 5 Commercial Sites</option>
+                        <option value="6 - 25 Sites">6 - 25 Sites / Campuses</option>
+                        <option value="26 - 100 Sites">26 - 100 Regional Sites</option>
+                        <option value="100+ Global Facilities">100+ Global Enterprise Facilities</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
+                        Procurement Timeline
+                      </label>
+                      <select
+                        value={timeline}
+                        onChange={(e) => setTimeline(e.target.value)}
+                        className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
+                      >
+                        <option value="Within 30 days">Immediate (Within 30 Days)</option>
+                        <option value="1 - 3 Months">1 - 3 Months</option>
+                        <option value="Q3 / Q4 Budget Cycle">Next Budget Cycle (3-6 Months)</option>
+                        <option value="Active RFP / Vendor Evaluation">Active RFP / Vendor Tender</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-mono">
-                    Operational Requirements / Notes
+                    {mode === 'demo' ? 'Special Requirements / Site Context' : 'Specific RFP Scope & Custom Contract Notes'}
                   </label>
                   <textarea
                     rows={2}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tell us about your patrol tracking, incident reporting, or margin billing needs..."
+                    placeholder={mode === 'demo' ? "e.g., We have 45 hospital campus officers requiring panic alerts..." : "e.g., Requesting pricing model for 120 guards across 14 logistics terminals..."}
                     className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:ring-2 focus:ring-blue-700/20 focus:outline-none"
                   />
                 </div>
@@ -251,16 +362,16 @@ export const DemoModal: React.FC<Props> = ({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-sm transition-all shadow-md shadow-blue-700/25 cursor-pointer disabled:opacity-70"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-sm transition-all shadow-md shadow-blue-700/25 cursor-pointer disabled:opacity-70 active:scale-[0.98]"
                   >
                     {isSubmitting ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Submitting to WordPress Backend...</span>
+                        <span>Submitting to Aegies Operations...</span>
                       </>
                     ) : (
                       <>
-                        <span>Submit Demo Request</span>
+                        <span>{mode === 'demo' ? 'Schedule Live Demonstration' : 'Request Custom Quote & Scope'}</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
@@ -268,11 +379,11 @@ export const DemoModal: React.FC<Props> = ({
                 </div>
 
                 <div className="flex items-center justify-center gap-3 pt-2 text-[11px] text-slate-500 font-medium">
-                  <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5 text-emerald-600" /> SOC 2 Certified</span>
+                  <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5 text-emerald-600" /> SOC 2 Type II Audited</span>
                   <span>•</span>
-                  <span>Zero Spam</span>
+                  <span>Strict NDA & Security</span>
                   <span>•</span>
-                  <span>Immediate Response</span>
+                  <span>Direct Specialist Call</span>
                 </div>
               </form>
             )}

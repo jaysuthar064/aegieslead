@@ -9,7 +9,7 @@ import {
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { DynamicSectionRenderer } from './components/DynamicSectionRenderer';
-import { DemoModal } from './components/DemoModal';
+import { DemoModal, type ModalMode } from './components/DemoModal';
 import { SeoHead } from './components/SeoHead';
 
 function getInitialPageFromUrl(): { slug: string; anchor?: string } {
@@ -18,6 +18,7 @@ function getInitialPageFromUrl(): { slug: string; anchor?: string } {
 
   if (path === 'platform' || hash === 'platform') return { slug: 'platform', anchor: hash };
   if (path === 'who-we-serve' || path === 'solutions' || hash === 'who-we-serve') return { slug: 'who-we-serve', anchor: hash };
+  if (path === 'workforce' || path === 'mobile' || hash === 'workforce') return { slug: 'workforce', anchor: hash };
   if (path === 'pricing' || hash === 'pricing') return { slug: 'pricing', anchor: hash };
   if (path === 'company' || path === 'security' || hash === 'company') return { slug: 'company', anchor: hash };
 
@@ -31,8 +32,9 @@ function App() {
   const [pageData, setPageData] = useState<PageData>(FALLBACK_HOME_PAGE);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
-  // Interactive Demo Modal State
+  // Interactive Modal State (Demo vs Sales/Quote Mode)
   const [isDemoModalOpen, setIsDemoModalOpen] = useState<boolean>(false);
+  const [modalMode, setModalMode] = useState<ModalMode>('demo');
   const [selectedPersona, setSelectedPersona] = useState<string>('Enterprise Security Leaders');
 
   const loadCmsData = useCallback(async (slug: string) => {
@@ -111,9 +113,14 @@ function App() {
     }
   };
 
-  const handleOpenDemoModal = (persona?: string) => {
-    if (persona) {
-      setSelectedPersona(persona);
+  const handleOpenDemoModal = (personaOrRole?: string, mode: ModalMode = 'demo') => {
+    if (personaOrRole === 'sales' || personaOrRole === 'quote') {
+      setModalMode('sales');
+    } else {
+      setModalMode(mode);
+      if (personaOrRole) {
+        setSelectedPersona(personaOrRole);
+      }
     }
     setIsDemoModalOpen(true);
   };
@@ -164,10 +171,11 @@ function App() {
         onRequestDemo={handleOpenDemoModal}
       />
 
-      {/* Interactive Request a Demo Modal */}
+      {/* Interactive Request a Demo / Sales Quote Modal */}
       <DemoModal
         isOpen={isDemoModalOpen}
         onClose={handleCloseDemoModal}
+        initialMode={modalMode}
         defaultPersona={selectedPersona}
         sourcePage={currentPage}
       />

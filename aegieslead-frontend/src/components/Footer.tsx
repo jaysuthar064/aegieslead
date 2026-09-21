@@ -6,7 +6,7 @@ interface Props {
   footer: FooterSettings;
   branding: BrandingSettings;
   onNavigate?: (slug: string, anchor?: string) => void;
-  onRequestDemo?: (persona?: string) => void;
+  onRequestDemo?: (persona?: string, mode?: 'demo' | 'sales') => void;
 }
 
 export const Footer: React.FC<Props> = ({
@@ -18,9 +18,14 @@ export const Footer: React.FC<Props> = ({
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string, label: string) => {
     e.preventDefault();
 
-    if (label.toLowerCase().includes('demo') || label.toLowerCase().includes('contact sales')) {
+    if (label.toLowerCase().includes('demo')) {
       if (onRequestDemo) {
-        onRequestDemo();
+        onRequestDemo('Enterprise Security Leaders', 'demo');
+        return;
+      }
+    } else if (label.toLowerCase().includes('contact sales') || label.toLowerCase().includes('pricing')) {
+      if (onRequestDemo && label.toLowerCase().includes('contact sales')) {
+        onRequestDemo('Enterprise Security Leaders', 'sales');
         return;
       }
     }
