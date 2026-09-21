@@ -1,6 +1,5 @@
 import React from 'react';
 import type { MetricsSettings } from '../../types/cms';
-import { ScrollReveal } from '../motion/ScrollReveal';
 
 interface Props {
   settings: MetricsSettings;
@@ -10,25 +9,45 @@ export const MetricsSection: React.FC<Props> = ({ settings }) => {
   const items = settings.items || [];
 
   return (
-    <section className="py-24 bg-[#111] text-white">
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-white/20">
+    <section id="metrics" className="py-20 bg-blue-50/70 text-slate-900 relative border-y border-blue-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        {(settings.headline || settings.description) && (
+          <div className="text-center max-w-2xl mx-auto mb-16 animate-fade-in-up">
+            {settings.headline && (
+              <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-3 tracking-tight font-sans">
+                {settings.headline}
+              </h2>
+            )}
+            {settings.description && (
+              <p className="text-slate-600 text-base leading-relaxed font-normal">
+                {settings.description}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* 4-Column Stat Grid (Clean White Stat Cards with Royal Blue Numbers) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {items.map((item, idx) => (
-            <ScrollReveal key={idx} variant="fade" delay={idx * 150} className="p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-white/20 last:border-0 flex flex-col justify-end min-h-[240px]">
-              <div className="text-[10px] font-mono tracking-widest uppercase opacity-40 mb-auto">
+            <div
+              key={idx}
+              className="p-8 rounded-3xl bg-white border border-blue-200/90 text-center shadow-xs hover-lift group"
+            >
+              <div className="text-4xl sm:text-5xl font-black text-blue-700 font-mono mb-2 group-hover:scale-105 transition-transform tracking-tight">
+                {item.value}
+              </div>
+              <div className="text-base font-black text-slate-900 mb-1 font-sans">
                 {item.label}
               </div>
-              <div>
-                <div className="text-5xl lg:text-6xl font-medium tracking-tighter mb-4">
-                  {item.value}
-                </div>
-                <div className="text-sm text-white/60 font-serif">
-                  {item.subtext}
-                </div>
+              <div className="text-xs text-slate-500 font-medium">
+                {item.subtext}
               </div>
-            </ScrollReveal>
+            </div>
           ))}
         </div>
+
       </div>
     </section>
   );

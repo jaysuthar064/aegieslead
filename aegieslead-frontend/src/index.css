@@ -1,15 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-500: #0a0a0a;
-  --color-primary-600: #000000;
-  --color-primary-900: #000000;
-  --color-accent: #f43f5e; /* Sharp editorial accent, sparingly used */
-  --color-surface: #f9f9f9;
-  
-  --font-sans: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Instrument Serif', 'Newsreader', serif;
-  --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+  --color-primary-500: #1d4ed8;
+  --color-primary-600: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-accent: #0f172a;
+  --color-surface: #f8fafc;
 }
 
 html {
@@ -21,8 +17,8 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
-  color: #111111;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #0f172a;
   background-color: #ffffff;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -31,129 +27,176 @@ body {
 
 /* Custom Easing Curves for Cinematic Motion */
 :root {
-  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
-  --ease-fluid: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Base Structural Grid */
-.editorial-grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 1.5rem;
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Image Mask Reveal */
-@keyframes maskRevealUp {
-  from {
-    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
-  }
-  to {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-  }
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-.animate-mask-up {
-  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
-  animation: maskRevealUp 1.2s var(--ease-expo) forwards;
+/* Enhanced Complex Floating for Modern SaaS Aesthetics */
+@keyframes floatComplex1 {
+  0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+  33% { transform: translateY(-10px) rotate(-1deg) scale(1.01); }
+  66% { transform: translateY(5px) rotate(1deg) scale(0.99); }
 }
 
-/* Typography Reveal */
-@keyframes lineRevealUp {
-  from {
-    transform: translateY(110%);
-  }
-  to {
-    transform: translateY(0);
-  }
+@keyframes floatComplex2 {
+  0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+  33% { transform: translateY(8px) rotate(1.5deg) scale(0.99); }
+  66% { transform: translateY(-8px) rotate(-0.5deg) scale(1.02); }
 }
 
-/* Utility Animations */
+@keyframes floatComplex3 {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(-2deg); }
+}
+
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
 }
 
+/* Endless Background Ambient Text Marquee */
+@keyframes ambientMarquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Text Shimmer Sweep */
+@keyframes textShine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes radarWave {
+  0% { transform: scale(0.8); opacity: 0.9; }
+  50% { transform: scale(1.6); opacity: 0.3; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* Utility Animation Classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s var(--ease-out-expo) forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.6s var(--ease-out-expo) forwards;
+}
+
+.animate-float-1 {
+  animation: floatComplex1 8s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: floatComplex2 9s ease-in-out infinite;
+}
+
+.animate-float-3 {
+  animation: floatComplex3 7s ease-in-out infinite;
+}
+
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 35s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
-/* Minimal Hover Effects */
-.hover-line-grow {
-  position: relative;
+.animate-ambient-marquee {
+  animation: ambientMarquee 60s linear infinite;
 }
 
-.hover-line-grow::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.4s var(--ease-expo);
+.animate-text-shine {
+  background-size: 200% auto;
+  animation: textShine 4s linear infinite;
 }
 
-.hover-line-grow:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
+.animate-radar-wave {
+  animation: radarWave 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
 }
 
-.btn-editorial {
-  border: 1px solid #111;
-  background: transparent;
-  color: #111;
-  border-radius: 0;
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* Cinematic Hover Lift & Card Glare */
+.hover-lift {
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 24px 40px -8px rgba(15, 23, 42, 0.1), 0 10px 15px -4px rgba(15, 23, 42, 0.05);
+}
+
+/* Button Shimmer Sweeps */
+.button-shimmer {
   position: relative;
   overflow: hidden;
-  transition: color 0.4s var(--ease-expo);
 }
 
-.btn-editorial::before {
+.button-shimmer::after {
   content: '';
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 0;
+  left: -100%;
   width: 100%;
   height: 100%;
-  background-color: #111;
-  transition: transform 0.4s var(--ease-expo);
-  z-index: -1;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: transform 0.8s ease-in-out;
 }
 
-.btn-editorial:hover {
-  color: #fff;
+.button-shimmer:hover::after {
+  transform: translateX(250%);
 }
 
-.btn-editorial:hover::before {
-  transform: translateY(-100%);
+/* Custom Cursor Hide on Touch Devices */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor-element {
+    display: none !important;
+  }
 }
 
-.btn-editorial-solid {
-  background: #111;
-  color: #fff;
-  border: 1px solid #111;
-  border-radius: 0;
-  transition: background-color 0.4s var(--ease-expo), color 0.4s var(--ease-expo);
-}
-
-.btn-editorial-solid:hover {
-  background: transparent;
-  color: #111;
-}
-
-/* Reduced Motion */
+/* Accessibility: Respect Reduced Motion Preferences */
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee, .animate-ambient-marquee, .animate-text-shine {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-radar-wave,
+  .animate-pulse-glow {
+    animation: none !important;
   }
 }

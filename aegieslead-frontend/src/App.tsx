@@ -160,7 +160,7 @@ function App() {
       />
 
       {/* Main Content Area: Dynamic Section Dispatcher with Fluid Page Transitions */}
-      <main key={currentPage} className="flex-grow pt-20 animate-fade-in">
+      <main key={currentPage} className="flex-grow pt-20 animate-fade-in-up">
         <DynamicSectionRenderer
           sections={pageData.sections}
           onRequestDemo={handleOpenDemoModal}

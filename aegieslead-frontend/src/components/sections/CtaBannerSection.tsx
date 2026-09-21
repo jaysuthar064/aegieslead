@@ -1,6 +1,6 @@
 import React from 'react';
 import type { CtaBannerSettings } from '../../types/cms';
-import { ScrollReveal } from '../motion/ScrollReveal';
+import { ArrowRight, ShieldCheck, Sparkles, PhoneCall } from 'lucide-react';
 
 interface Props {
   settings: CtaBannerSettings;
@@ -9,41 +9,55 @@ interface Props {
 
 export const CtaBannerSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
   return (
-    <section className="py-40 bg-white border-t border-b border-black text-[#111]">
-      <div className="max-w-[1200px] mx-auto px-6 sm:px-12 text-center flex flex-col items-center">
-        
-        <ScrollReveal variant="line-up" delay={0}>
-          <h2 className="text-5xl sm:text-7xl font-sans tracking-tighter font-medium leading-[1.05] mb-8">
+    <section id="demo" className="py-24 bg-white text-white relative">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="rounded-3xl bg-gradient-to-r from-blue-800 via-blue-700 to-indigo-900 p-10 sm:p-16 text-center space-y-6 shadow-2xl">
+          
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/20 text-white text-xs font-bold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" />
+            TRANSFORM YOUR SECURITY OPERATIONS
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight max-w-3xl mx-auto font-sans">
             {settings.headline}
           </h2>
-        </ScrollReveal>
 
-        <ScrollReveal variant="fade" delay={150}>
-          <p className="text-xl text-black/50 font-serif max-w-2xl mx-auto mb-12">
+          <p className="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto font-normal leading-relaxed">
             {settings.subheadline}
           </p>
-        </ScrollReveal>
 
-        <ScrollReveal variant="fade" delay={300} className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
-          {settings.primary_button && (
-            <button
-              onClick={() => onRequestDemo?.('Enterprise', 'demo')}
-              className="btn-editorial-solid px-12 py-5 text-xs tracking-widest font-bold uppercase w-full sm:w-auto"
-            >
-              {settings.primary_button.label}
-            </button>
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+            {settings.primary_button && (
+              <button
+                type="button"
+                onClick={() => onRequestDemo ? onRequestDemo('Enterprise Security Leaders', 'demo') : (location.hash = '#demo')}
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-blue-900 font-extrabold text-base transition-all shadow-xl hover:bg-slate-100 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              >
+                <span>{settings.primary_button.label || 'Request a Demo'}</span>
+                <ArrowRight className="w-5 h-5 text-blue-800" />
+              </button>
+            )}
+
+            {settings.secondary_button && (
+              <button
+                type="button"
+                onClick={() => onRequestDemo ? onRequestDemo('Enterprise Security Leaders', 'sales') : (location.hash = '#contact')}
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-blue-950/60 hover:bg-blue-950 border border-blue-400/40 text-white font-bold text-base transition-all active:scale-[0.98] cursor-pointer"
+              >
+                <PhoneCall className="w-4 h-4 text-blue-300" />
+                <span>{settings.secondary_button.label || 'Contact Enterprise Sales'}</span>
+              </button>
+            )}
+          </div>
+
+          {settings.footnote && (
+            <div className="pt-6 flex items-center justify-center gap-2 text-xs text-blue-200 font-medium">
+              <ShieldCheck className="w-4 h-4 text-emerald-300" />
+              <span>{settings.footnote}</span>
+            </div>
           )}
 
-          {settings.secondary_button && (
-            <button
-              onClick={() => onRequestDemo?.('Enterprise', 'sales')}
-              className="btn-editorial px-12 py-5 text-xs tracking-widest font-bold uppercase w-full sm:w-auto"
-            >
-              {settings.secondary_button.label}
-            </button>
-          )}
-        </ScrollReveal>
-
+        </div>
       </div>
     </section>
   );

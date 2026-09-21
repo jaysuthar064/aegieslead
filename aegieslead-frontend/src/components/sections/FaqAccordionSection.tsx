@@ -1,59 +1,70 @@
 import React, { useState } from 'react';
 import type { FaqAccordionSettings } from '../../types/cms';
-import { ScrollReveal } from '../motion/ScrollReveal';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 
 interface Props {
   settings: FaqAccordionSettings;
 }
 
 export const FaqAccordionSection: React.FC<Props> = ({ settings }) => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
   const items = settings.items || [];
 
+  const toggle = (idx: number) => {
+    setOpenIndex(openIndex === idx ? null : idx);
+  };
+
   return (
-    <section className="py-32 bg-white text-[#111]">
-      <div className="max-w-[1200px] mx-auto px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-16">
+    <section id="faq" className="py-24 bg-white text-slate-900 relative border-b border-slate-200">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="col-span-12 md:col-span-4">
-          <ScrollReveal variant="line-up">
-            <h2 className="text-3xl font-serif tracking-tight mb-6">
-              {settings.title}
-            </h2>
-            {settings.subtitle && (
-              <p className="text-sm text-black/50 font-mono uppercase tracking-widest leading-relaxed">
-                {settings.subtitle}
-              </p>
-            )}
-          </ScrollReveal>
+        {/* Header */}
+        <div className="text-center mb-16 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
+            <HelpCircle className="w-3.5 h-3.5 text-blue-700" />
+            FREQUENTLY ASKED QUESTIONS
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 mb-3 font-sans">
+            {settings.title}
+          </h2>
+          {settings.subtitle && (
+            <p className="text-slate-600 text-base leading-relaxed font-normal">
+              {settings.subtitle}
+            </p>
+          )}
         </div>
 
-        <div className="col-span-12 md:col-span-8 space-y-0 border-t border-black/10">
+        {/* Accordions */}
+        <div className="space-y-4">
           {items.map((item, idx) => {
             const isOpen = openIndex === idx;
 
             return (
-              <ScrollReveal key={idx} variant="fade" delay={idx * 50} className="border-b border-black/10">
+              <div
+                key={idx}
+                className="rounded-2xl bg-slate-50 border border-slate-200/90 overflow-hidden transition-all duration-200 hover:border-blue-300"
+              >
                 <button
                   type="button"
-                  onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="w-full py-8 text-left flex justify-between items-center group cursor-pointer"
+                  onClick={() => toggle(idx)}
+                  className="w-full flex items-center justify-between p-6 text-left font-bold text-base sm:text-lg text-slate-900 hover:text-blue-700 transition-colors cursor-pointer"
                 >
-                  <span className="text-lg font-medium tracking-tight group-hover:pl-2 transition-all duration-300">
-                    {item.q}
-                  </span>
-                  <span className={`font-mono text-xl transition-transform duration-300 ${isOpen ? 'rotate-45 opacity-40' : ''}`}>
-                    +
-                  </span>
+                  <span>{item.q}</span>
+                  <div className={`p-1 rounded-lg transition-colors ${isOpen ? 'bg-blue-100 text-blue-700' : 'text-slate-400'}`}>
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform duration-300 ${
+                        isOpen ? 'transform rotate-180' : ''
+                      }`}
+                    />
+                  </div>
                 </button>
 
-                <div 
-                  className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'max-h-96 opacity-100 pb-8' : 'max-h-0 opacity-0'}`}
-                >
-                  <p className="text-black/60 font-serif leading-relaxed pr-12">
+                {isOpen && (
+                  <div className="px-6 pb-6 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-200/60 bg-white animate-fade-in">
                     {item.a}
-                  </p>
-                </div>
-              </ScrollReveal>
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
