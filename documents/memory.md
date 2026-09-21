@@ -30,7 +30,7 @@
 
 ## 2. Multi-Page Architecture & Content Inventory
 
-1. **Home (`/`):** Unified Operating System for Physical Security (Hero, Trust Logos, Dual Persona Switcher, Live Command Dispatch, Core Feature Rows, Metrics, Case Studies, FAQ, Dual CTA).
+1. **Home (`/`):** Unified Operating System for Physical Security (Hero, Infinite Logo Marquee Slider, Dual Persona Switcher, Command Center Interface, Z-Pattern Features, Metrics Bar, Case Studies, FAQ, Dual CTA).
 2. **Platform Architecture (`/platform`):** Comprehensive Technical Architecture & Engines (Sub-Second GPS Dispatch, Incident Evidence Chain-of-Custody, Automated Invoicing, Performance Benchmarks, FAQ).
 3. **Who We Serve / Solutions (`/who-we-serve`):** Enterprise Security Teams vs. Guarding Contractor Agencies vs. Industry Verticals (Commercial Real Estate, Healthcare Systems, Critical Infrastructure NERC CIP).
 4. **Workforce Management & Mobile Guard (`/workforce`):** Offline-First Guard Mobile Portal, NFC Checkpoint Scanning, Emergency Duress / Panic Alerts, Shift Rostering & Attendance Reminders.
@@ -39,15 +39,12 @@
 
 ---
 
-## 3. Dual-Mode Modal Action Workflows
+## 3. UI, Animation & Navigation Specifications
 
-* **Button 1: "Request a Demo" (`mode="demo"`):**
-  * Launches 1-on-1 guided live software walkthrough booking.
-  * Fields: Name, Email, Company, Phone, Guard Capacity, Operational Persona, Primary Demo Interest.
-* **Button 2: "Contact Enterprise Sales / Quote" (`mode="sales"`):**
-  * Launches Enterprise RFP & Custom Pricing Quote inquiry.
-  * Fields: Name, Email, Company, Phone, Monitored Site Volume, Procurement Timeline, Custom Scope Notes.
-* **Backend Storage:** Submits directly to WordPress REST API (`POST /?rest_route=/aegies/v1/leads`), stored in `wp_options` (`aegies_leads_log`), and rendered live in the **Leads & Inquiries** admin dashboard.
+* **Navbar Layout:** Clean 3-part layout (Left: Brand Shield & Logo, Center: Navigation links with mega-menus, Right: "Contact Sales" and "Request a Demo" buttons with shimmer effect). Client portal button removed.
+* **Infinite Logo Marquee Slider:** Seamless horizontal slider with gradient edge fade masks and hover-pause animation.
+* **Smooth Page Transitions & Micro-Interactions:** `animate-fade-in-up`, `hover-lift` card elevation, `button-shimmer` sweeps, `animate-float-slow` floating widgets, and live clock timer.
+* **Dual-Mode CTA Modal:** Differentiated forms for "Request a Demo" (`mode="demo"`) vs. "Contact Enterprise Sales / Quote" (`mode="sales"`), submitting directly to WordPress REST API (`POST /?rest_route=/aegies/v1/leads`).
 
 ---
 
@@ -60,4 +57,4 @@
 | **Phase 3** | High-Performance REST API & Open CORS Layer | ✅ Complete | Endpoints `/global`, `/pages`, `/page/{slug}`, `/leads`, 100% open CORS in `.htaccess` and `mu-plugins` |
 | **Phase 4** | React Frontend Dynamic Section Engine | ✅ Complete | High-contrast Trackforce 1:1 light SaaS design system matching `design-study.md` |
 | **Phase 5** | Live Sync, .env Security & Media Pipeline | ✅ Complete | Background revalidation, `.env` gitignore security, dynamic image upload rendering |
-| **Phase 6** | Multi-Page Architecture, Dual-Mode CTA Modal & SEO Ingestion | ✅ Complete | 6 distinct rich pages (`home`, `platform`, `who-we-serve`, `workforce`, `pricing`, `company`), dual modal (`demo` vs `sales`), pushState routing |
+| **Phase 6** | Multi-Page Architecture, Animations & Leads Workflow | ✅ Complete | 6 rich pages, infinite logo marquee slider, modern motion animations, dual modal, clean navbar layout |
