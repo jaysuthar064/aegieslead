@@ -1,184 +1,93 @@
 import React from 'react';
 import type { ZFeaturesSettings } from '../../types/cms';
-import { CheckCircle2, ArrowRight, ShieldCheck, Camera, Sparkles, MapPin } from 'lucide-react';
+import { ScrollReveal } from '../motion/ScrollReveal';
+
+declare module 'react' {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    'data-cursor'?: string;
+  }
+}
 
 interface Props {
   settings: ZFeaturesSettings;
-  onRequestDemo?: (persona?: string) => void;
+  onRequestDemo?: (persona?: string, mode?: 'demo' | 'sales') => void;
 }
 
 export const FeatureZRowsSection: React.FC<Props> = ({ settings, onRequestDemo }) => {
   const rows = settings.rows || [];
 
-  const getRowAnchorId = (badge: string, title: string, idx: number) => {
-    const combined = `${badge} ${title}`.toLowerCase();
-    if (combined.includes('patrol')) return 'patrols';
-    if (combined.includes('incident')) return 'incidents';
-    if (combined.includes('proposal') || combined.includes('rfp')) return 'proposals';
-    if (combined.includes('bill') || combined.includes('timesheet')) return 'billing';
-    return `feature-row-${idx + 1}`;
-  };
-
-  const getVisualContent = (badge: string, title: string) => {
-    if (badge.includes('FIELD') || title.includes('Patrol')) {
-      return (
-        <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-xl text-white">
-          <div className="flex items-center justify-between text-xs pb-3 border-b border-slate-800">
-            <span className="font-mono font-bold text-cyan-400 flex items-center gap-1.5">
-              <MapPin className="w-4 h-4" /> GPS RADAR • ACTIVE ROUTE 04
-            </span>
-            <span className="text-slate-400 font-mono">100% GEOFENCED</span>
-          </div>
-          <div className="space-y-2.5">
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-              <span className="text-white font-bold">Checkpoint A: Main Gate</span>
-              <span className="text-emerald-400 font-mono font-bold">Scanned 08:04:12</span>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-              <span className="text-white font-bold">Checkpoint B: Vault Access</span>
-              <span className="text-emerald-400 font-mono font-bold">Scanned 08:18:40</span>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-              <span className="text-white font-bold">Checkpoint C: Loading Dock</span>
-              <span className="text-blue-400 font-mono font-bold">Guards En Route (30m)</span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (badge.includes('INCIDENT') || title.includes('Incident')) {
-      return (
-        <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-xl text-white">
-          <div className="flex items-center justify-between text-xs pb-3 border-b border-slate-800">
-            <span className="font-mono font-bold text-amber-400 flex items-center gap-1.5">
-              <Camera className="w-4 h-4" /> EVIDENCE PACKAGE #INC-4091
-            </span>
-            <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-mono text-[10px] font-bold">TAMPER-PROOF</span>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5 text-xs">
-            <div className="text-white font-bold text-sm">Vehicle Impact Report • South Parking Lot</div>
-            <div className="text-slate-400 leading-relaxed">Captured via Mobile Guard App with GPS timestamp, 3 high-res photos, and witness statement.</div>
-            <div className="flex items-center gap-2 pt-2 border-t border-slate-800 text-[11px] text-slate-300">
-              <ShieldCheck className="w-4 h-4 text-blue-400" />
-              <span className="font-medium">Signed & Approved by Field Supervisor J. Ramirez</span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-xl text-white">
-        <div className="flex items-center justify-between text-xs pb-3 border-b border-slate-800">
-          <span className="font-mono font-bold text-purple-400 flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4" /> AI COMMERCIAL SUITE
-          </span>
-          <span className="text-slate-400 font-mono font-bold">SCOPING ENGINE</span>
-        </div>
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5 text-xs">
-          <div className="text-white font-bold text-sm">Automated Security Proposal Draft #PR-882</div>
-          <div className="text-slate-400 leading-relaxed">AI analyzed site risk requirements, recommended 4 guard posts, and generated 3-tier billable rate cards.</div>
-          <div className="flex justify-between items-center pt-2.5 border-t border-slate-800 text-[11px]">
-            <span className="text-emerald-400 font-bold">Win Rate Lift: +38%</span>
-            <span className="text-purple-300 font-semibold">Ready to Send PDF</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <section id="features" className="py-24 bg-white text-slate-900 border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+    <section className="py-32 bg-white text-[#111]">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-12">
         
         {settings.section_title && (
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
-              CORE PRODUCT CAPABILITIES
-            </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900">
+          <ScrollReveal variant="line-up" className="mb-24 md:w-2/3">
+            <h2 className="text-4xl md:text-6xl font-medium tracking-tight font-serif leading-tight">
               {settings.section_title}
             </h2>
-          </div>
+          </ScrollReveal>
         )}
 
-        {rows.map((row, idx) => {
-          const isImageLeft = row.image_align === 'left';
-          const rowId = getRowAnchorId(row.badge, row.title, idx);
+        <div className="space-y-32">
+          {rows.map((row, idx) => (
+            <div key={idx} className="editorial-grid items-start border-t-2 border-black/5 pt-12">
+              
+              {/* Counter & Badge */}
+              <div className="col-span-12 md:col-span-3 flex md:flex-col justify-between mb-8 md:mb-0">
+                <span className="font-mono text-xs opacity-40">0{idx + 1}</span>
+                {row.badge && <span className="font-mono text-[10px] uppercase tracking-widest mt-auto border border-black/10 px-2 py-1 inline-block w-max">{row.badge}</span>}
+              </div>
 
-          return (
-            <div
-              key={idx}
-              id={rowId}
-              className={`scroll-mt-28 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center ${
-                isImageLeft ? 'lg:flex-row-reverse' : ''
-              }`}
-            >
-              {/* Text Column */}
-              <div className={`lg:col-span-6 space-y-6 ${isImageLeft ? 'lg:order-2' : 'lg:order-1'}`}>
-                {row.badge && (
-                  <div className="inline-block px-3 py-1 rounded-md bg-blue-100/70 border border-blue-300 text-blue-800 text-xs font-bold font-mono uppercase tracking-wider">
-                    {row.badge}
-                  </div>
-                )}
-
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight">
+              {/* Typography */}
+              <div className="col-span-12 md:col-span-5 pr-8">
+                <h3 className="text-3xl font-medium tracking-tight mb-6 leading-snug">
                   {row.title}
                 </h3>
-
-                <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+                <p className="text-lg text-black/60 font-serif leading-relaxed mb-8">
                   {row.description}
                 </p>
-
+                
                 {row.bullets && row.bullets.length > 0 && (
-                  <div className="space-y-3 pt-2">
+                  <ul className="space-y-3 mb-10 border-l border-black/10 pl-6">
                     {row.bullets.map((bullet, bIdx) => (
-                      <div key={bIdx} className="flex items-start gap-3 text-base text-slate-800 font-semibold">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{bullet}</span>
-                      </div>
+                      <li key={bIdx} className="text-sm font-sans tracking-wide text-black/80">
+                        {bullet}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 )}
-
+                
                 {row.cta_text && (
-                  <div className="pt-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (row.cta_url === '#demo' || !row.cta_url || row.cta_url === '#') {
-                          if (onRequestDemo) onRequestDemo();
-                        } else if (row.cta_url.startsWith('#')) {
-                          document.querySelector(row.cta_url)?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                      className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 font-bold text-sm group cursor-pointer transition-colors"
-                    >
-                      <span>{row.cta_text}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </div>
+                  <button 
+                    onClick={() => onRequestDemo?.()}
+                    className="text-xs uppercase tracking-widest font-bold hover-line-grow inline-block"
+                  >
+                    {row.cta_text}
+                  </button>
                 )}
               </div>
 
-              {/* Visual Card Column: Custom Image or Vector Interface */}
-              <div className={`lg:col-span-6 ${isImageLeft ? 'lg:order-1' : 'lg:order-2'}`}>
-                {row.image_url ? (
-                  <div className="rounded-2xl bg-white border border-slate-300 shadow-xl overflow-hidden p-2">
-                    <img
-                      src={row.image_url}
-                      alt={row.title}
-                      className="w-full h-auto rounded-xl object-cover"
-                    />
-                  </div>
-                ) : (
-                  getVisualContent(row.badge, row.title)
-                )}
+              {/* Image / Graphic Reveal */}
+              <div className="col-span-12 md:col-span-4 mt-12 md:mt-0">
+                <ScrollReveal variant="mask-up" className="aspect-[4/5] bg-[#f9f9f9] border border-black/5 p-4 flex flex-col justify-between" data-cursor="view">
+                  {row.image_url ? (
+                    <img src={row.image_url} className="w-full h-full object-cover grayscale opacity-90 contrast-125" alt="" />
+                  ) : (
+                    <div className="h-full border border-black/10 p-6 flex flex-col justify-between text-xs font-mono opacity-50">
+                      <div className="flex justify-between">
+                        <span>DATA_STREAM</span>
+                        <span>[ ACTIVE ]</span>
+                      </div>
+                      <div className="text-4xl font-serif mt-12 mb-auto">+38%</div>
+                      <span>ENCRYPTED VAULT // {idx}</span>
+                    </div>
+                  )}
+                </ScrollReveal>
               </div>
+
             </div>
-          );
-        })}
+          ))}
+        </div>
 
       </div>
     </section>

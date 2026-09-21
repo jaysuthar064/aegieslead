@@ -81,14 +81,14 @@ export const DynamicSectionRenderer: React.FC<Props> = ({
             {isHeroOrLogos ? (
               content
             ) : (
-              <ScrollReveal variant="fade-up" delay={50} threshold={0.1}>
+              <ScrollReveal variant="fade" delay={50} threshold={0.1}>
                 {content}
               </ScrollReveal>
             )}
 
             {/* Inject Pinned Horizontal Story Reel right after product showcase or audience tabs */}
             {showStoryReel && (sec.type === 'audience_tabs' || (sec.type === 'product_showcase' && activeSections.length < 6)) && (
-              <ScrollReveal variant="fade-up" delay={80} threshold={0.1}>
+              <ScrollReveal variant="fade" delay={80} threshold={0.1}>
                 <HorizontalStoryReel onRequestDemo={onRequestDemo} />
               </ScrollReveal>
             )}
