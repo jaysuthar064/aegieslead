@@ -38,17 +38,17 @@ export const TextReveal: React.FC<Props> = ({
 
   const words = text.split(' ');
 
-  const shineClass = useShine ? 'bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 animate-text-shine' : '';
-
   return (
-    <Component ref={ref as any} className={`flex flex-wrap ${className} ${shineClass}`}>
+    <Component ref={ref as any} className={`flex flex-wrap ${className}`}>
       {words.map((word, idx) => (
         <span key={idx} className="overflow-hidden mr-[0.25em] py-1">
           <span
-            className="inline-block transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
+            className={`inline-block transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
+              useShine ? 'bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 animate-text-shine' : ''
+            }`}
             style={{
               opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.95)',
+              transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.95)',
               transitionDelay: `${idx * staggerDelay}ms`,
             }}
           >
